@@ -1,0 +1,1172 @@
+<!doctype html>
+<html lang="ms">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#BFE7FF">
+<meta name="color-scheme" content="light">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Misi Pipit">
+<meta name="description" content="Permainan Matematik dan Bahasa Melayu dengan animasi untuk murid pemulihan sekolah rendah.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23BFE7FF'/%3E%3Ccircle cx='50' cy='56' r='32' fill='%23FFC83D'/%3E%3Ccircle cx='40' cy='50' r='7' fill='%23fff'/%3E%3Ccircle cx='60' cy='50' r='7' fill='%23fff'/%3E%3Ccircle cx='41' cy='51' r='3.5' fill='%231D2760'/%3E%3Ccircle cx='59' cy='51' r='3.5' fill='%231D2760'/%3E%3Cpath d='M44 60h12l-6 9z' fill='%23F08A24'/%3E%3C/svg%3E">
+<title>Misi Pipit</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&family=Baloo+2:wght@600;800&display=swap">
+<style>
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%;color-scheme:light}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0}
+[hidden]{display:none!important}
+</style>
+<style>
+/* Layout: one narrow column like a picture-book page. Sky and hills stay fixed behind a white question card that holds one task at a time. */
+:root{
+  --sky:#BFE7FF; --sky-pale:#E4F5FF; --sky-deep:#86CBFA; --soft:#EAF6FF;
+  --ink:#1D2760; --sun:#FFC83D; --sun-deep:#D99B12;
+  --grass:#43B873; --grass-deep:#1B8348; --grass-dark:#146235;
+  --berry:#6F4FF2; --berry-deep:#4B33B8; --coral:#FF6B5E; --card:#FFFFFF;
+  --f-display:'Baloo 2','Trebuchet MS',Verdana,sans-serif;
+  --f-read:'Andika','Verdana','Trebuchet MS',sans-serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+body{
+  background:var(--sky); color:var(--ink); font-family:var(--f-read);
+  font-size:1.0625rem; line-height:1.45;
+  padding:14px max(16px,env(safe-area-inset-right,0px)) 120px max(16px,env(safe-area-inset-left,0px)); min-height:100%;
+}
+button{font:inherit;color:inherit;touch-action:manipulation;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none;-webkit-appearance:none;appearance:none;cursor:pointer}
+button:focus-visible{outline:4px solid var(--berry);outline-offset:3px}
+h1,h2,p{margin:0}
+
+/* Scene */
+.scene{position:fixed;top:0;left:0;right:0;bottom:0;overflow:hidden;pointer-events:none;z-index:0;background:linear-gradient(var(--sky) 0%,var(--sky-pale) 75%)}
+.sun{position:absolute;top:34px;right:-30px;width:110px;height:110px;border-radius:50%;background:var(--sun);
+  box-shadow:0 0 0 18px rgba(255,200,61,.28),0 0 0 40px rgba(255,200,61,.13);animation:glow 6s ease-in-out infinite}
+.cloud{position:absolute;left:-220px;width:120px;height:34px;background:#fff;border-radius:40px;opacity:.92;animation:drift linear infinite}
+.cloud::before,.cloud::after{content:"";position:absolute;background:#fff;border-radius:50%}
+.cloud::before{width:54px;height:54px;left:18px;top:-26px}
+.cloud::after{width:40px;height:40px;left:62px;top:-18px}
+.c1{top:16%;animation-duration:70s;animation-delay:-20s}
+.c2{top:30%;transform:scale(.7);animation-duration:95s;animation-delay:-60s}
+.c3{top:9%;transform:scale(.55);animation-duration:80s;animation-delay:-5s}
+.hills{position:absolute;left:0;bottom:0;width:100%;height:140px}
+.hill-back{fill:#8ED9A5}.hill-front{fill:var(--grass)}
+
+.app{position:relative;z-index:1;max-width:600px;margin:0 auto}
+
+/* Shared controls */
+.btn{font-family:var(--f-display);font-weight:800;font-size:1.3rem;border:0;border-radius:20px;padding:12px 22px;color:#fff;background:var(--berry);box-shadow:0 6px 0 var(--berry-deep);transition:transform .08s,box-shadow .08s}
+.btn:active{transform:translateY(4px);box-shadow:0 2px 0 var(--berry-deep)}
+.btn.green{background:var(--grass-deep);box-shadow:0 6px 0 var(--grass-dark)}
+.btn.green:active{box-shadow:0 2px 0 var(--grass-dark)}
+.btn.light{background:#fff;color:var(--ink);box-shadow:0 6px 0 var(--sky-deep)}
+.btn.light:active{box-shadow:0 2px 0 var(--sky-deep)}
+.pill{display:inline-flex;align-items:center;gap:8px;background:#fff;color:var(--ink);border:0;border-radius:999px;padding:8px 14px;font-family:var(--f-display);font-weight:800;font-size:1.05rem;box-shadow:0 4px 0 var(--sky-deep)}
+.iconbtn{width:48px;height:48px;border-radius:50%;border:0;background:#fff;color:var(--ink);display:grid;place-items:center;box-shadow:0 4px 0 var(--sky-deep);flex:none}
+.iconbtn svg{width:26px;height:26px}
+.iconbtn.go{background:var(--berry);color:#fff;box-shadow:0 4px 0 var(--berry-deep)}
+.chip{display:inline-flex;align-items:center;gap:6px;background:#fff;border-radius:999px;padding:6px 12px 6px 8px;font-family:var(--f-display);font-weight:800;font-size:1.15rem}
+.chip .star{width:24px;height:24px}
+.star{fill:var(--sun);stroke:var(--sun-deep);stroke-width:1.4;stroke-linejoin:round}
+
+/* Mascot */
+.pipit{flex:none;width:96px}
+.pipit.big{width:112px}
+.pipit svg{display:block;width:100%;height:auto;overflow:visible}
+.pipit .shadow{fill:rgba(29,39,96,.15)}
+.pipit .feet{stroke:#F08A24;stroke-width:4;stroke-linecap:round;fill:none}
+.pipit .wingf{fill:#F2A81D}
+.pipit .bodyf{fill:var(--sun)}
+.pipit .belly{fill:#FFE9A3}
+.pipit .tuft{stroke:#F2A81D;stroke-width:4;stroke-linecap:round;fill:none}
+.pipit .cheek{fill:var(--coral);opacity:.45}
+.pipit .beak{fill:#F08A24}
+.pipit .bird{animation:bob 3s ease-in-out infinite;transform-origin:60px 104px}
+.pipit .eyes{animation:blink 5s infinite;transform-box:fill-box;transform-origin:center}
+.pipit .wing{transform-box:fill-box;transform-origin:50% 10%}
+.pipit.happy .bird{animation:jump .6s ease-out 2}
+.pipit.happy .wl{animation:flapL .22s ease-in-out 6}
+.pipit.happy .wr{animation:flapR .22s ease-in-out 6}
+.pipit.sad .bird{animation:none;transform:rotate(-7deg) translateY(4px)}
+
+/* Home */
+.brand{position:relative;display:flex;align-items:center;gap:12px;padding-right:56px}
+.brand h1{font-family:var(--f-display);font-weight:800;font-size:2.6rem;line-height:1}
+.brand p{font-weight:700;margin-top:6px}
+.brand .mutebtn{position:absolute;right:0;top:0}
+.row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:14px}
+.lbl{font-family:var(--f-display);font-weight:800;font-size:1.3rem;margin:22px 0 10px}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:8px;background:#fff;padding:6px;border-radius:22px}
+.segbtn{border:0;background:transparent;border-radius:16px;padding:10px 8px;font-family:var(--f-display);font-weight:800;font-size:1.25rem;color:var(--ink)}
+.segbtn.on{background:var(--ink);color:#fff}
+.levelnote{margin-top:10px;font-size:.95rem;font-weight:700;background:rgba(255,255,255,.75);border-radius:14px;padding:8px 12px}
+.subjects{display:grid;gap:14px;grid-template-columns:1fr}
+.subject{display:flex;align-items:center;gap:14px;text-align:left;border:0;border-radius:26px;padding:16px;min-height:112px}
+.subject.math{background:var(--berry);color:#fff;box-shadow:0 8px 0 var(--berry-deep)}
+.subject.bm{background:var(--sun);color:var(--ink);box-shadow:0 8px 0 var(--sun-deep)}
+.subject:active{transform:translateY(5px)}
+.subject.math:active{box-shadow:0 3px 0 var(--berry-deep)}
+.subject.bm:active{box-shadow:0 3px 0 var(--sun-deep)}
+.sicon{flex:none;width:76px;height:76px;border-radius:50%;background:#fff;color:var(--ink);display:grid;place-items:center;font-family:var(--f-display);font-weight:800;font-size:1.7rem}
+.stext{min-width:0}
+.stext strong{display:block;font-family:var(--f-display);font-weight:800;font-size:1.9rem;line-height:1.1}
+.stext span{display:block;font-weight:700;font-size:1rem;margin-top:2px}
+.teachernote{margin-top:22px;background:rgba(255,255,255,.8);border-radius:14px;padding:10px 12px;font-size:.9rem}
+
+/* Game */
+.topbar{display:flex;align-items:center;gap:10px}
+.progress{flex:1;display:flex;justify-content:center;gap:6px;min-width:0;flex-wrap:wrap}
+.progress i{width:12px;height:12px;border-radius:50%;background:#fff;border:3px solid var(--sky-deep);display:block}
+.progress i.ok{background:var(--grass-deep);border-color:var(--grass-deep)}
+.progress i.miss{background:var(--sun);border-color:var(--sun-deep)}
+.progress i.cur{border-color:var(--berry);animation:pulse 1.2s ease-in-out infinite}
+.qcard{margin-top:14px;background:var(--card);border-radius:28px;padding:18px;box-shadow:0 8px 0 rgba(29,39,96,.14)}
+.prompt{display:flex;gap:12px;align-items:flex-start}
+.prompt p{flex:1;min-width:0;font-weight:700;font-size:1.3rem;line-height:1.35}
+.stage{margin:14px 0;padding:12px;background:var(--soft);border-radius:20px;min-height:110px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px}
+.stage:empty{display:none}
+.grp{display:flex;flex-wrap:wrap;justify-content:center;gap:4px;max-width:100%;padding:6px 8px;border-radius:16px}
+.eq .g1{background:#D7EDFF}
+.eq .g2{background:#FFEDB8}
+.eq{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px}
+.op{font-family:var(--f-display);font-weight:800;font-size:2rem}
+.numeq{font-family:var(--f-display);font-weight:800;font-size:2.3rem;letter-spacing:.03em}
+.item{position:relative;border:0;background:none;padding:2px;font-size:var(--sz,2.6rem);line-height:1;font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif;animation:pop .4s backwards}
+.item.counted{transform:scale(.9)}
+.item .badge{position:absolute;right:-6px;top:-8px;min-width:1.5em;height:1.5em;border-radius:999px;background:var(--berry);color:#fff;font:800 .72rem/1 var(--f-display);display:grid;place-items:center;font-size:calc(var(--sz,2.6rem) * .34);animation:pop .25s}
+.item.gone{animation:fly .8s ease forwards;pointer-events:none}
+.seq{display:flex;gap:8px;width:100%;justify-content:center}
+.nbox{flex:1 1 0;min-width:0;max-width:66px;height:68px;display:grid;place-items:center;background:#fff;border:3px solid var(--sky-deep);border-radius:14px;font-family:var(--f-display);font-weight:800;font-size:1.7rem}
+.nbox.blank{background:var(--sun);border:3px dashed var(--ink);animation:wiggle 1.4s ease-in-out infinite}
+.nbox.blank.filled{background:var(--grass-deep);color:#fff;border-style:solid;animation:pop .35s}
+.pic{font-size:5.6rem;line-height:1.1;text-align:center;animation:float 3s ease-in-out infinite;font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif}
+.wordshow{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:3px;font-weight:700;font-size:2.6rem;letter-spacing:.05em;line-height:1.2}
+.blank{display:inline-grid;place-items:center;min-width:1.1em;height:1.25em;background:var(--sun);border:3px dashed var(--ink);border-radius:10px;animation:wiggle 1.4s ease-in-out infinite}
+.blank.filled{background:var(--grass-deep);color:#fff;border-style:solid;animation:pop .35s}
+
+.answers{margin-top:4px;display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(100px,1fr))}
+.answers.words{grid-template-columns:repeat(auto-fit,minmax(140px,1fr))}
+.answers.two{grid-template-columns:1fr 1fr}
+.answers.tiles{display:flex;flex-wrap:wrap;justify-content:center}
+.choice{min-height:76px;min-width:0;padding:8px;border-radius:20px;border:4px solid var(--sky-deep);background:#fff;color:var(--ink);box-shadow:0 6px 0 var(--sky-deep);font-family:var(--f-read);font-weight:700;font-size:2rem;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;transition:transform .08s,box-shadow .08s}
+.answers.words .choice{font-size:1.7rem}
+.choice:hover{border-color:var(--berry)}
+.choice:active{transform:translateY(4px);box-shadow:0 2px 0 var(--sky-deep)}
+.choice.right{background:var(--grass-deep);border-color:var(--grass-dark);color:#fff;box-shadow:0 6px 0 var(--grass-dark);animation:pop .4s}
+.choice.wrong{background:#FFE3E0;border-color:var(--coral);box-shadow:0 6px 0 var(--coral);animation:shake .45s;opacity:.8}
+.choice.reveal{border-color:var(--grass-deep);box-shadow:0 0 0 6px rgba(27,131,72,.35);animation:pulse .9s ease-in-out 2}
+.bign{font-size:2.4rem;line-height:1}
+.dotrow{display:flex;flex-wrap:wrap;justify-content:center;gap:4px;max-width:100%}
+.dotrow i{width:10px;height:10px;border-radius:50%;background:var(--sun-deep);display:block}
+.slots{display:flex;flex-wrap:wrap;justify-content:center;gap:10px}
+.slot{min-width:84px;min-height:68px;padding:0 12px;border:4px dashed var(--sky-deep);border-radius:18px;background:#fff;color:var(--ink);font-family:var(--f-read);font-weight:700;font-size:1.8rem}
+.slot.filled{border-style:solid;border-color:var(--berry);animation:pop .25s}
+.slots.right .slot{background:var(--grass-deep);border-color:var(--grass-dark);color:#fff}
+.slots.wrong{animation:shake .45s}
+.tile{min-width:84px;min-height:68px;padding:0 14px;border:0;border-radius:18px;background:var(--sun);color:var(--ink);box-shadow:0 6px 0 var(--sun-deep);font-family:var(--f-read);font-weight:700;font-size:1.8rem;transition:transform .1s,opacity .1s}
+.tile:active{transform:translateY(4px);box-shadow:0 2px 0 var(--sun-deep)}
+.tile.used{opacity:.22;pointer-events:none;transform:scale(.9)}
+
+.cap{font-size:1.05rem;font-weight:700;line-height:1.15;text-align:center}
+.sentence{font-size:1.6rem;gap:8px;letter-spacing:0;line-height:1.6}
+.bigletter{font-family:var(--f-read);font-weight:700;font-size:4.2rem;line-height:1;text-align:center}
+.bigword{font-size:2.2rem;font-weight:700;text-align:center;letter-spacing:.04em;line-height:1.2}
+.clock{width:min(220px,70%);height:auto;display:block}
+.clk-face{fill:#fff;stroke:var(--ink);stroke-width:5}
+.clk-num{font-family:var(--f-display);font-weight:800;font-size:16px;fill:var(--ink);text-anchor:middle;dominant-baseline:central}
+.clk-h{stroke:var(--ink);stroke-width:7;stroke-linecap:round}
+.clk-m{stroke:var(--berry);stroke-width:4.5;stroke-linecap:round}
+.clk-c{fill:var(--coral)}
+.shp{width:104px;height:104px;display:block;animation:float 3s ease-in-out infinite}
+.choice .shp{width:68px;height:68px;animation:none}
+.nbox.pat{font-size:1.5rem;height:56px;max-width:52px;font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif}
+.seq.days .nbox{height:52px;font-size:1rem;border-width:2px;padding:0;max-width:48px}
+.nbox.mark{background:var(--sun);border-color:var(--sun-deep)}
+.nbox.ans{background:var(--grass-deep);border-color:var(--grass-dark);color:#fff;animation:pop .35s}
+.cluster{display:flex;flex-wrap:wrap;justify-content:center;gap:2px;font-size:1.35rem;line-height:1.1;max-width:100%;font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif}
+.story{display:flex;gap:12px;align-items:center;justify-content:center;font-size:2.6rem;line-height:1;font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif}
+.answers.balloons{grid-template-columns:repeat(auto-fit,minmax(88px,1fr));justify-items:center;padding-bottom:22px}
+.balloons .choice{position:relative;width:88px;min-height:108px;border:0;border-radius:50% 50% 50% 50%/58% 58% 42% 42%;background:var(--bg,#fff);color:var(--fg,var(--ink));box-shadow:inset -8px -10px 0 rgba(0,0,0,.12);animation:float 3s ease-in-out infinite;font-size:2.2rem}
+.balloons .choice::after{content:"";position:absolute;left:50%;bottom:-20px;width:2px;height:20px;background:var(--ink)}
+.balloons .choice:nth-child(1){--bg:var(--coral);--fg:var(--ink)}
+.balloons .choice:nth-child(2){--bg:var(--berry);--fg:#fff;animation-delay:-1s}
+.balloons .choice:nth-child(3){--bg:var(--sun);--fg:var(--ink);animation-delay:-2s}
+.balloons .choice.right{--bg:var(--grass-deep);--fg:#fff;animation:pop .45s}
+.balloons .choice.wrong{--bg:#E8E8F2;--fg:var(--ink);animation:shake .45s;opacity:.7}
+.balloons .choice.reveal{box-shadow:0 0 0 6px rgba(27,131,72,.45),inset -8px -10px 0 rgba(0,0,0,.12)}
+.balloons .choice:active{transform:none}
+.coach{margin-top:18px;display:flex;align-items:flex-end;gap:10px}
+.bubble{position:relative;flex:1;min-width:0;background:#fff;border-radius:20px 20px 20px 6px;padding:12px 16px;font-weight:700;font-size:1.05rem;box-shadow:0 5px 0 rgba(29,39,96,.12)}
+.bubble::before{content:"";position:absolute;left:-10px;bottom:14px;border:8px solid transparent;border-right:12px solid #fff;border-left:0}
+.bubble.pop{animation:pop .3s}
+.nextwrap{position:sticky;bottom:0;display:flex;justify-content:center;padding-top:14px;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 8px)}
+.nextwrap .btn{width:min(100%,380px);font-size:1.5rem;padding:14px 22px}
+
+/* Result */
+.resultcard{margin-top:20px;background:#fff;border-radius:28px;padding:24px 18px;text-align:center;box-shadow:0 8px 0 rgba(29,39,96,.14);display:flex;flex-direction:column;align-items:center;gap:12px}
+.resultcard h2{font-family:var(--f-display);font-weight:800;font-size:2rem;line-height:1.1;text-wrap:balance}
+.stars{display:flex;gap:6px;justify-content:center}
+.stars .star{width:72px;height:72px;max-width:26vw}
+.stars .star.off{fill:#fff;stroke:var(--sky-deep)}
+.stars .star.on{animation:starpop .6s backwards;animation-delay:var(--d)}
+.resultcard .btns{display:flex;flex-direction:column;gap:12px;width:min(100%,340px);margin-top:6px}
+
+.confetti{position:fixed;top:0;left:0;right:0;bottom:0;pointer-events:none;overflow:hidden;z-index:50}
+.confetti span{position:absolute;top:-16px;width:10px;height:16px;border-radius:2px;animation:fall 1.7s ease-in forwards}
+
+@media (min-width:560px){
+  .subjects{grid-template-columns:1fr 1fr}
+  .subject{flex-direction:column;align-items:flex-start;min-height:190px}
+}
+
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+@keyframes blink{0%,94%,100%{transform:scaleY(1)}97%{transform:scaleY(.1)}}
+@keyframes jump{0%{transform:translateY(0) scale(1,1)}25%{transform:translateY(0) scale(1.06,.92)}60%{transform:translateY(-26px) scale(.96,1.05)}100%{transform:translateY(0) scale(1,1)}}
+@keyframes flapL{50%{transform:rotate(38deg)}}
+@keyframes flapR{50%{transform:rotate(-38deg)}}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-9px)}40%{transform:translateX(9px)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}
+@keyframes pop{0%{transform:scale(.5);opacity:0}70%{transform:scale(1.12);opacity:1}100%{transform:scale(1)}}
+@keyframes wiggle{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(2deg)}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+@keyframes glow{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes fly{0%{transform:translateY(0);opacity:1}40%{transform:translateY(-18px) rotate(-12deg);opacity:1}100%{transform:translateY(0);opacity:.18;filter:grayscale(1)}}
+@keyframes starpop{0%{transform:scale(0) rotate(-120deg)}70%{transform:scale(1.25) rotate(8deg)}100%{transform:scale(1) rotate(0)}}
+@keyframes fall{to{transform:translate(var(--dx),105vh) rotate(var(--r))}}
+@keyframes drift{to{transform:translateX(calc(100vw + 460px))}}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
+</style>
+</head>
+<body>
+<div class="scene" aria-hidden="true">
+  <div class="sun"></div>
+  <div class="cloud c1"></div><div class="cloud c2"></div><div class="cloud c3"></div>
+  <svg class="hills" viewBox="0 0 400 140" preserveAspectRatio="none">
+    <path class="hill-back" d="M0 70 Q90 20 190 62 T400 50 V140 H0Z"/>
+    <path class="hill-front" d="M0 100 Q110 56 220 96 T400 84 V140 H0Z"/>
+  </svg>
+</div>
+
+<main class="app">
+
+  <section id="home">
+    <header class="brand">
+      <div class="pipit big" data-mascot></div>
+      <div>
+        <h1>Misi Pipit</h1>
+        <p>Jom belajar sambil bermain bersama Pipit!</p>
+      </div>
+      <button class="iconbtn mutebtn" type="button" aria-label="Bunyi" aria-pressed="false"></button>
+    </header>
+    <div class="row"><span class="chip"><svg class="star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3 6.1 20.6l1.3-6.6L2.5 9.4l6.6-.8z"/></svg><span class="startotal">0</span> bintang</span></div>
+
+    <h2 class="lbl">Pilih tahap</h2>
+    <div class="seg" role="group" aria-label="Pilih tahap">
+      <button class="segbtn on" type="button" data-level="1" aria-pressed="true">Mudah</button>
+      <button class="segbtn" type="button" data-level="2" aria-pressed="false">Cabaran</button>
+    </div>
+    <p class="levelnote" id="levelNote"></p>
+
+    <h2 class="lbl">Pilih permainan</h2>
+    <div class="subjects">
+      <button class="subject math" type="button" data-subject="math">
+        <span class="sicon" aria-hidden="true">123</span>
+        <span class="stext"><strong>Kira-kira</strong><span>Matematik</span></span>
+      </button>
+      <button class="subject bm" type="button" data-subject="bm">
+        <span class="sicon" aria-hidden="true">abc</span>
+        <span class="stext"><strong>Baca &amp; Eja</strong><span>Bahasa Melayu</span></span>
+      </button>
+    </div>
+    <p class="teachernote">Setiap pusingan ada 10 soalan. Murid boleh cuba dua kali. Selepas jawapan pertama yang salah, Pipit beri petunjuk. Tiada markah negatif.</p>
+  </section>
+
+  <section id="game" hidden>
+    <div class="topbar">
+      <button class="pill" type="button" id="backBtn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>Menu</button>
+      <div class="progress" id="progress" aria-label="Kemajuan soalan"></div>
+      <span class="chip"><svg class="star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3 6.1 20.6l1.3-6.6L2.5 9.4l6.6-.8z"/></svg><span class="startotal">0</span></span>
+    </div>
+
+    <div class="qcard">
+      <div class="prompt">
+        <p id="promptText"></p>
+        <button class="iconbtn go" type="button" id="speakBtn" aria-label="Dengar soalan">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9z" fill="currentColor"/><path d="M16.5 8.5a5 5 0 010 7M19 6a8.5 8.5 0 010 12"/></svg>
+        </button>
+      </div>
+      <div class="stage" id="stage"></div>
+      <div class="answers" id="answers"></div>
+    </div>
+
+    <div class="coach">
+      <div class="pipit" id="coach" data-mascot></div>
+      <p class="bubble" id="bubble" aria-live="polite">Jom mulakan!</p>
+    </div>
+    <div class="nextwrap" id="nextWrap" hidden>
+      <button class="btn green" type="button" id="nextBtn">Soalan seterusnya</button>
+    </div>
+  </section>
+
+  <section id="result" hidden>
+    <div class="resultcard">
+      <div class="pipit big" id="resCoach" data-mascot></div>
+      <div class="stars" id="resStars" aria-hidden="true"></div>
+      <h2 id="resTitle"></h2>
+      <p id="resText"></p>
+      <div class="btns">
+        <button class="btn green" type="button" id="againBtn">Main lagi</button>
+        <button class="btn light" type="button" id="menuBtn">Menu utama</button>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+(function(){
+'use strict';
+var $=function(id){return document.getElementById(id)};
+var ri=function(a,b){return Math.floor(Math.random()*(b-a+1))+a};
+var shuffle=function(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=ri(0,i);var t=a[i];a[i]=a[j];a[j]=t}return a};
+var pick=function(a){return a[ri(0,a.length-1)]};
+var reduceMotion=false;
+try{reduceMotion=window.matchMedia('(prefers-reduced-motion: reduce)').matches}catch(e){}
+
+var muted=false,totalStars=0;
+try{muted=localStorage.getItem('mp.muted')==='1';totalStars=parseInt(localStorage.getItem('mp.stars'),10)||0}catch(e){}
+function save(k,v){try{localStorage.setItem(k,v)}catch(e){}}
+
+/* Mascot */
+var MASCOT='<svg viewBox="0 0 120 120" aria-hidden="true"><ellipse class="shadow" cx="60" cy="110" rx="28" ry="5"/><g class="bird"><path class="feet" d="M48 96v10M42 106h12M72 96v10M66 106h12"/><g class="wing wl"><ellipse class="wingf" cx="21" cy="68" rx="10" ry="21" transform="rotate(18 21 68)"/></g><g class="wing wr"><ellipse class="wingf" cx="99" cy="68" rx="10" ry="21" transform="rotate(-18 99 68)"/></g><ellipse class="bodyf" cx="60" cy="64" rx="40" ry="38"/><ellipse class="belly" cx="60" cy="78" rx="26" ry="22"/><path class="tuft" d="M52 28q2-12 8-4M60 26q4-14 10-6M68 30q6-8 10-2"/><circle class="cheek" cx="34" cy="70" r="6"/><circle class="cheek" cx="86" cy="70" r="6"/><g class="eyes"><circle cx="46" cy="54" r="11" fill="#fff"/><circle cx="74" cy="54" r="11" fill="#fff"/><circle cx="48" cy="56" r="6" fill="#1D2760"/><circle cx="72" cy="56" r="6" fill="#1D2760"/><circle cx="50" cy="53" r="2" fill="#fff"/><circle cx="74" cy="53" r="2" fill="#fff"/></g><path class="beak" d="M53 65h14l-7 10z"/></g></svg>';
+Array.prototype.forEach.call(document.querySelectorAll('[data-mascot]'),function(el){el.innerHTML=MASCOT});
+
+var STAR='<svg class="star %C" viewBox="0 0 24 24"><path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3 6.1 20.6l1.3-6.6L2.5 9.4l6.6-.8z"/></svg>';
+
+/* Sound */
+var ac=null;
+function tone(f,t,d,type,v){
+  try{
+    ac=ac||new (window.AudioContext||window.webkitAudioContext)();
+    if(ac.state==='suspended')ac.resume();
+    var o=ac.createOscillator(),g=ac.createGain(),s=ac.currentTime+t;
+    o.type=type||'sine';o.frequency.value=f;
+    g.gain.setValueAtTime(0.0001,s);
+    g.gain.exponentialRampToValueAtTime(v||.12,s+.02);
+    g.gain.exponentialRampToValueAtTime(.0001,s+d);
+    o.connect(g);g.connect(ac.destination);o.start(s);o.stop(s+d+.05);
+  }catch(e){}
+}
+function sfx(k){
+  if(muted)return;
+  if(k==='ok'){[523,659,784,1047].forEach(function(f,i){tone(f,i*.09,.22)})}
+  else if(k==='no'){tone(260,0,.18,'triangle',.1);tone(210,.14,.25,'triangle',.1)}
+  else if(k==='pop'){tone(700,0,.08,'sine',.09)}
+  else if(k==='win'){[523,659,784,659,784,1047].forEach(function(f,i){tone(f,i*.12,.28)})}
+}
+function speak(text){
+  try{
+    if(muted||!('speechSynthesis' in window))return;
+    window.speechSynthesis.cancel();
+    var u=new SpeechSynthesisUtterance(text);u.lang='ms-MY';u.rate=.85;
+    window.speechSynthesis.speak(u);
+  }catch(e){}
+}
+var ICON_ON='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9z" fill="currentColor"/><path d="M16.5 8.5a5 5 0 010 7M19 6a8.5 8.5 0 010 12"/></svg>';
+var ICON_OFF='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9z" fill="currentColor"/><path d="M17 9l5 6M22 9l-5 6"/></svg>';
+function paintMute(){
+  Array.prototype.forEach.call(document.querySelectorAll('.mutebtn'),function(b){
+    b.innerHTML=muted?ICON_OFF:ICON_ON;
+    b.setAttribute('aria-pressed',muted?'true':'false');
+    b.setAttribute('aria-label',muted?'Bunyi mati. Tekan untuk buka':'Bunyi hidup. Tekan untuk tutup');
+  });
+}
+Array.prototype.forEach.call(document.querySelectorAll('.mutebtn'),function(b){
+  b.addEventListener('click',function(){
+    muted=!muted;save('mp.muted',muted?'1':'0');
+    if(muted){try{window.speechSynthesis.cancel()}catch(e){}}
+    paintMute();sfx('pop');
+  });
+});
+paintMute();
+
+/* Effects */
+function confetti(n){
+  if(reduceMotion)return;
+  var box=document.createElement('div');box.className='confetti';
+  var cols=['#FFC83D','#6F4FF2','#FF6B5E','#43B873','#4CB7FF'];
+  for(var i=0;i<n;i++){
+    var s=document.createElement('span');
+    s.style.left=ri(2,98)+'%';
+    s.style.background=pick(cols);
+    s.style.animationDelay=(ri(0,50)/100)+'s';
+    s.style.setProperty('--dx',ri(-60,60)+'px');
+    s.style.setProperty('--r',ri(-540,540)+'deg');
+    box.appendChild(s);
+  }
+  document.body.appendChild(box);
+  setTimeout(function(){box.remove()},2600);
+}
+function mood(m){
+  var el=$('coach');
+  el.classList.remove('happy','sad');
+  void el.offsetWidth;
+  el.classList.add(m);
+  setTimeout(function(){el.classList.remove(m)},1300);
+}
+function say(msg){
+  var b=$('bubble');b.textContent=msg;
+  b.classList.remove('pop');void b.offsetWidth;b.classList.add('pop');
+}
+
+/* State */
+var S={subject:'math',level:1,qs:[],i:0,score:0,tries:0,locked:true,res:[],count:0};
+var PRAISE=['Betul! Hebat!','Pandai! Teruskan!','Bagus sekali!','Wah, tepat sekali!','Syabas!'];
+var TIPS=['Jom cuba soalan ini!','Fikir dahulu, kemudian pilih.','Kamu boleh buat!','Perlahan-lahan, tak apa.'];
+
+function show(id){
+  ['home','game','result'].forEach(function(s){$(s).hidden=(s!==id)});
+  window.scrollTo(0,0);
+}
+function paintStars(){
+  Array.prototype.forEach.call(document.querySelectorAll('.startotal'),function(e){e.textContent=totalStars});
+}
+paintStars();
+
+/* Helpers to build the stage */
+function el(tag,cls,html){var e=document.createElement(tag);if(cls)e.className=cls;if(html!=null)e.innerHTML=html;return e}
+function sizeFor(n){$('stage').style.setProperty('--sz',n>14?'1.8rem':n>10?'2.1rem':n>6?'2.5rem':'2.9rem')}
+function items(emoji,n,startDelay){
+  var g=el('div','grp');
+  for(var k=0;k<n;k++){
+    (function(k){
+      var b=el('button','item',emoji);
+      b.type='button';
+      b.setAttribute('aria-label','Ketuk untuk mengira');
+      b.style.animationDelay=((k+(startDelay||0))*50)+'ms';
+      b.addEventListener('click',function(){
+        if(b.dataset.c||b.classList.contains('gone'))return;
+        S.count++;b.dataset.c='1';b.classList.add('counted');
+        var bd=el('span','badge',String(S.count));b.appendChild(bd);
+        sfx('pop');speak(String(S.count));
+      });
+      g.appendChild(b);
+    })(k);
+  }
+  return g;
+}
+function numChoices(c,min,max,extra){
+  var pool=shuffle([c-1,c+1,c-2,c+2].concat(extra||[])).filter(function(v){return v>=min&&v<=max&&v!==c});
+  var out=[c];
+  for(var i=0;i<pool.length&&out.length<3;i++){if(out.indexOf(pool[i])<0)out.push(pool[i])}
+  while(out.length<3){var v=ri(min,max);if(out.indexOf(v)<0)out.push(v)}
+  return shuffle(out);
+}
+function choices(opts,correct,fmt,cls){
+  var box=$('answers');box.className='answers '+(cls||'');box.innerHTML='';
+  opts.forEach(function(v){
+    var b=el('button','choice',fmt?fmt(v):String(v));
+    b.type='button';
+    b.dataset.ok=(v===correct)?'1':'';
+    b.addEventListener('click',function(){
+      if(S.locked)return;
+      sfx('pop');
+      var ok=(v===correct);
+      if(!ok){b.classList.add('wrong');b.disabled=true}
+      judge(ok,{el:b,reveal:function(){var r=box.querySelector('[data-ok="1"]');if(r)r.classList.add('reveal')}});
+    });
+    box.appendChild(b);
+  });
+}
+
+/* Judging */
+function judge(ok,o){
+  o=o||{};
+  if(S.locked)return;
+  var q=S.qs[S.i];
+  if(ok){
+    S.locked=true;
+    var first=(S.tries===0);
+    if(first)S.score++;
+    S.res[S.i]=first?1:0;
+    if(o.el)o.el.classList.add('right');
+    if(q.finish)q.finish();
+    sfx('ok');mood('happy');confetti(first?26:14);
+    say((first?pick(PRAISE):'Betul! Bagus, kamu tidak berputus asa.')+' '+q.explain);
+    speak(q.explain);
+    showNext();
+  }else{
+    S.tries++;sfx('no');mood('sad');
+    if(S.tries>=2){
+      S.locked=true;S.res[S.i]=0;
+      if(o.reveal)o.reveal();
+      if(q.finish)q.finish();
+      say('Tidak mengapa. '+q.explain+' Kita cuba soalan lain.');
+      showNext();
+    }else{
+      say(q.hint||'Hampir! Cuba lagi.');
+    }
+  }
+}
+function showNext(){
+  paintDots();
+  $('nextBtn').textContent=(S.i>=S.qs.length-1)?'Lihat keputusan':'Soalan seterusnya';
+  $('nextWrap').hidden=false;
+  try{$('nextBtn').focus({preventScroll:true})}catch(e){}
+}
+
+/* Question builders: Matematik */
+var THINGS=[['🍎','epal'],['🐥','anak ayam'],['⭐','bintang'],['🎈','belon'],['🐟','ikan'],['🍪','biskut'],['🚗','kereta'],['🌸','bunga']];
+
+function qCount(L){
+  var t=pick(THINGS),e=t[0],name=t[1],n=(L===1)?ri(2,10):ri(8,20);
+  var p='Kira bilangan '+name+'. Ada berapa?';
+  return {prompt:p,say:p,tip:'Ketuk setiap gambar untuk mengira.',hint:'Ketuk setiap gambar supaya tidak terlupa mana yang sudah dikira.',explain:'Ada '+n+' '+name+'.',
+    build:function(){sizeFor(n);$('stage').appendChild(items(e,n));choices(numChoices(n,0,L===1?12:22),n)}};
+}
+function qAdd(L){
+  var t=pick(THINGS),e=t[0],name=t[1],a,b;
+  if(L===1){a=ri(1,6);b=ri(1,Math.min(6,10-a))}else{a=ri(4,12);b=ri(3,20-a)}
+  var s=a+b;
+  var p='Ada '+a+' '+name+'. Tambah '+b+' '+name+' lagi. Berapa semuanya?';
+  return {prompt:p,say:p,tip:'Kira kumpulan biru, kemudian kumpulan kuning.',hint:'Kira semua gambar. Mula dengan kumpulan biru, terus ke kumpulan kuning.',explain:a+' tambah '+b+' sama dengan '+s+'.',
+    build:function(){
+      sizeFor(s);
+      var eq=el('div','eq');
+      var g1=items(e,a,0);g1.classList.add('g1');
+      var g2=items(e,b,a);g2.classList.add('g2');
+      eq.appendChild(g1);eq.appendChild(el('span','op','+'));eq.appendChild(g2);
+      $('stage').appendChild(eq);
+      $('stage').appendChild(el('div','numeq',a+' + '+b+' = ?'));
+      choices(numChoices(s,0,L===1?10:22),s);
+    }};
+}
+function qSub(L){
+  var t=pick(THINGS),e=t[0],name=t[1],tot,k;
+  if(L===1){tot=ri(4,10);k=ri(1,tot-1)}else{tot=ri(10,20);k=ri(2,tot-3)}
+  var r=tot-k;
+  var p='Ada '+tot+' '+name+'. '+k+' '+name+' diambil pergi. Berapa yang tinggal?';
+  return {prompt:p,say:p,tip:'Tengok gambar yang pergi.',hint:'Kira gambar yang masih tinggal sahaja.',explain:tot+' tolak '+k+' sama dengan '+r+'.',
+    build:function(){
+      sizeFor(tot);
+      var g=items(e,tot,0);
+      $('stage').appendChild(g);
+      $('stage').appendChild(el('div','numeq',tot+' − '+k+' = ?'));
+      setTimeout(function(){
+        var kids=Array.prototype.slice.call(g.children).slice(tot-k);
+        kids.forEach(function(x,i){setTimeout(function(){x.classList.add('gone')},i*220)});
+      },900);
+      choices(numChoices(r,0,L===1?10:20),r);
+    }};
+}
+function qSeq(L){
+  var step,start;
+  if(L===1){step=1;start=ri(1,8)}
+  else{step=pick([2,5,10]);start=(step===10)?ri(1,6)*10:(step===5?ri(0,6)*5:ri(1,8)*2)}
+  var arr=[0,1,2,3,4].map(function(i){return start+i*step});
+  var hole=ri(1,3),ans=arr[hole];
+  var extra=[ans+step,ans-step].filter(function(v){return v>=0});
+  return {prompt:'Nombor apakah yang hilang dalam urutan ini?',say:'Nombor apakah yang hilang dalam urutan ini?',
+    tip:step===1?'Kira dari kiri ke kanan.':'Kira lompat '+step+'.',
+    hint:step===1?'Lihat nombor sebelum dan selepas petak kosong.':'Setiap nombor bertambah '+step+'. Lihat nombor di sebelah petak kosong.',
+    explain:'Urutannya ialah '+arr.join(', ')+'.',
+    build:function(){
+      var row=el('div','seq');
+      arr.forEach(function(v,i){
+        var b=el('div','nbox'+(i===hole?' blank':''),i===hole?'?':String(v));
+        if(i===hole)this.blankEl=b;
+        row.appendChild(b);
+      },this);
+      $('stage').appendChild(row);
+      choices(numChoices(ans,0,Math.max(ans+step+2,12),extra),ans);
+    },
+    finish:function(){if(this.blankEl){this.blankEl.textContent=String(ans);this.blankEl.classList.add('filled')}}};
+}
+function qBig(L){
+  var max=(L===1)?10:50,a=ri(1,max),b;
+  do{b=ri(1,max)}while(b===a);
+  var bigger=!(L===2&&Math.random()<.4);
+  var correct=bigger?Math.max(a,b):Math.min(a,b),other=bigger?Math.min(a,b):Math.max(a,b);
+  var p=bigger?'Nombor manakah yang lebih besar?':'Nombor manakah yang lebih kecil?';
+  return {prompt:p,say:p,tip:'Lihat nombor dan titik-titik.',
+    hint:bigger?'Nombor yang lebih besar ialah yang datang kemudian apabila kita mengira.':'Nombor yang lebih kecil ialah yang datang dahulu apabila kita mengira.',
+    explain:correct+' lebih '+(bigger?'besar':'kecil')+' daripada '+other+'.',
+    build:function(){
+      choices([a,b],correct,function(v){
+        var d='';
+        if(L===1){d='<span class="dotrow">';for(var i=0;i<v;i++)d+='<i></i>';d+='</span>'}
+        return '<span class="bign">'+v+'</span>'+d;
+      },'two');
+    }};
+}
+/* Soalan kreatif: Matematik */
+var NUMW=['sifar','satu','dua','tiga','empat','lima','enam','tujuh','lapan','sembilan','sepuluh','sebelas','dua belas','tiga belas','empat belas','lima belas','enam belas','tujuh belas','lapan belas','sembilan belas','dua puluh'];
+var NAMES=[['Ali','👦'],['Siti','👧'],['Muthu','👦'],['Mei Ling','👧'],['Aina','👧'],['Danish','👦']];
+var PALETTE=['#6F4FF2','#FF6B5E','#43B873','#FFC83D','#4CB7FF'];
+var STORY_ITEMS=[['guli','🔵'],['pensel','✏️'],['biskut','🍪'],['kuih','🧁'],['belon','🎈']];
+var PAT_SETS=[['🔴','🔵','🔶','⚫'],['🍎','🍌','🍇','🍊'],['🐱','🐶','🐰','🐸'],['⭐','🌙','☀️','☁️']];
+
+function qCompare(L){
+  var t=pick(THINGS),e=t[0],max=(L===1)?8:15,a=ri(1,max),b;
+  do{b=ri(1,max)}while(b===a||(L===2&&Math.abs(a-b)<2));
+  var more=!(L===2&&Math.random()<.4);
+  var correct=more?(a>b?'A':'B'):(a<b?'A':'B');
+  var hi=Math.max(a,b),lo=Math.min(a,b);
+  var p=more?'Kumpulan manakah yang lebih banyak?':'Kumpulan manakah yang lebih sedikit?';
+  var cluster=function(n){var x='';for(var i=0;i<n;i++)x+=e;return '<span class="cluster">'+x+'</span>'};
+  return {prompt:p,say:p,tip:'Kira dahulu setiap kumpulan.',
+    hint:'Kira gambar dalam setiap kumpulan. Nombor mana yang lebih '+(more?'besar':'kecil')+'?',
+    explain:(more?hi:lo)+' lebih '+(more?'banyak':'sedikit')+' daripada '+(more?lo:hi)+'.',
+    build:function(){choices(['A','B'],correct,function(v){return cluster(v==='A'?a:b)},'two')}};
+}
+function qPattern(L){
+  var forms=(L===1)?['AB','AAB','ABB']:['ABC','AABB','ABAC'];
+  var f=pick(forms),set=shuffle(pick(PAT_SETS)),map={A:set[0],B:set[1],C:set[2]};
+  var vis=(L===1)?5:6,seq=[];
+  for(var i=0;i<=vis;i++)seq.push(map[f.charAt(i%f.length)]);
+  var ans=seq[vis],shown=seq.slice(0,vis);
+  var opts=[];
+  f.split('').forEach(function(c){if(opts.indexOf(map[c])<0)opts.push(map[c])});
+  for(var j=0;opts.length<3&&j<set.length;j++){if(opts.indexOf(set[j])<0)opts.push(set[j])}
+  opts=shuffle(opts);
+  return {prompt:'Apakah yang datang seterusnya dalam corak ini?',say:'Apakah yang datang seterusnya dalam corak ini?',
+    tip:'Cari bahagian kecil yang berulang.',hint:'Cari bahagian kecil yang berulang-ulang, kemudian sambung.',
+    explain:'Corak ini berulang, jadi gambar yang betul menyambungnya.',
+    build:function(){
+      var row=el('div','seq');
+      shown.forEach(function(v){row.appendChild(el('div','nbox pat',v))});
+      var bl=el('div','nbox pat blank','?');row.appendChild(bl);this.blankEl=bl;
+      $('stage').appendChild(row);
+      choices(opts,ans,function(v){return '<span class="bign">'+v+'</span>'},'');
+    },
+    finish:function(){if(this.blankEl){this.blankEl.textContent=ans;this.blankEl.classList.add('filled')}}};
+}
+function clockSvg(h,m){
+  var ha=((h%12)*30+m*.5)*Math.PI/180,ma=(m*6)*Math.PI/180;
+  var x='<svg class="clock" viewBox="0 0 200 200" role="img" aria-label="Jam"><circle class="clk-face" cx="100" cy="100" r="92"/>';
+  for(var i=1;i<=12;i++){var a=i*30*Math.PI/180;x+='<text class="clk-num" x="'+(100+Math.sin(a)*72).toFixed(1)+'" y="'+(100-Math.cos(a)*72).toFixed(1)+'">'+i+'</text>'}
+  x+='<line class="clk-h" x1="100" y1="100" x2="'+(100+Math.sin(ha)*46).toFixed(1)+'" y2="'+(100-Math.cos(ha)*46).toFixed(1)+'"/>';
+  x+='<line class="clk-m" x1="100" y1="100" x2="'+(100+Math.sin(ma)*68).toFixed(1)+'" y2="'+(100-Math.cos(ma)*68).toFixed(1)+'"/>';
+  x+='<circle class="clk-c" cx="100" cy="100" r="7"/></svg>';
+  return x;
+}
+function fmtTime(h,m){return h+':'+(m<10?'0'+m:m)}
+function qClock(L){
+  var h=ri(1,12),m=(L===1)?0:pick([0,30]);
+  var ans=fmtTime(h,m),h2=h%12+1,h3=(h+10)%12+1;
+  var opts=[ans,fmtTime(h2,m),(L===2)?fmtTime(h,m===0?30:0):fmtTime(h3,m)];
+  opts=shuffle(opts);
+  var spoken=(m===0)?'Pukul '+NUMW[h]+'.':'Pukul '+NUMW[h]+' setengah.';
+  return {prompt:'Pukul berapakah sekarang?',say:'Pukul berapakah sekarang?',tip:'Jarum pendek menunjuk jam.',
+    hint:(m===0)?'Jarum panjang menunjuk nombor 12. Jarum pendek menunjukkan jam.':'Jarum panjang di nombor 6 bermakna setengah jam. Jarum pendek menunjukkan jam.',
+    explain:spoken,
+    build:function(){
+      $('stage').appendChild(el('div','',clockSvg(h,m)));
+      choices(opts,ans,function(v){return '<span>'+v+'</span>'},'');
+    }};
+}
+function shapeSvg(name,color){
+  var body={
+    'bulatan':'<circle cx="50" cy="50" r="40"/>',
+    'segi tiga':'<polygon points="50,10 92,86 8,86"/>',
+    'segi empat sama':'<rect x="14" y="14" width="72" height="72" rx="4"/>',
+    'segi empat tepat':'<rect x="6" y="26" width="88" height="48" rx="4"/>',
+    'segi lima':'<polygon points="50,8 92,38 76,88 24,88 8,38"/>',
+    'segi enam':'<polygon points="28,12 72,12 94,50 72,88 28,88 6,50"/>'
+  }[name];
+  return '<svg class="shp" viewBox="0 0 100 100" aria-hidden="true" style="fill:'+color+';stroke:#1D2760;stroke-width:4;stroke-linejoin:round">'+body+'</svg>';
+}
+function qShape(L){
+  var names=['bulatan','segi tiga','segi empat sama','segi empat tepat'];
+  if(L===2)names=names.concat(['segi lima','segi enam']);
+  var n=pick(names),col=pick(PALETTE);
+  var opts=shuffle([n].concat(shuffle(names.filter(function(x){return x!==n})).slice(0,2)));
+  var sides={'segi tiga':3,'segi empat sama':4,'segi empat tepat':4,'segi lima':5,'segi enam':6}[n];
+  var hint=(n==='bulatan')?'Bentuk ini bulat dan tidak ada sudut.':
+    (n==='segi empat sama')?'Ada 4 sisi dan semua sisi sama panjang.':
+    (n==='segi empat tepat')?'Ada 4 sisi: dua sisi panjang dan dua sisi pendek.':
+    'Kira sisinya. Bentuk ini ada '+sides+' sisi.';
+  if(Math.random()<.5){
+    return {prompt:'Apakah nama bentuk ini?',say:'Apakah nama bentuk ini?',tip:'Kira sisi bentuk itu.',hint:hint,explain:'Ini ialah '+n+'.',
+      build:function(){
+        $('stage').appendChild(el('div','',shapeSvg(n,col)));
+        choices(opts,n,function(v){return '<span style="font-size:1.3rem">'+v+'</span>'},'words');
+      }};
+  }
+  return {prompt:'Yang manakah '+n+'?',say:'Yang manakah '+n+'?',tip:'Ketuk bentuk yang betul.',hint:hint,explain:'Ini ialah '+n+'.',
+    build:function(){choices(opts,n,function(v){return shapeSvg(v,pick(PALETTE))},'')}};
+}
+function qStory(L){
+  var nm=shuffle(NAMES),A=nm[0],B=nm[1],it=pick(STORY_ITEMS),name=it[0],e=it[1];
+  var add=Math.random()<.5,a,b,res,p,ex;
+  if(add){
+    if(L===1){a=ri(1,6);b=ri(1,Math.min(6,10-a))}else{a=ri(4,12);b=ri(3,20-a)}
+    res=a+b;
+    p=A[0]+' ada '+a+' '+name+'. '+B[0]+' beri '+b+' '+name+' lagi kepada '+A[0]+'. Berapa '+name+' '+A[0]+' sekarang?';
+    ex=A[0]+' ada '+res+' '+name+' sekarang.';
+  }else{
+    if(L===1){a=ri(4,10);b=ri(1,a-1)}else{a=ri(10,20);b=ri(2,a-3)}
+    res=a-b;
+    p=A[0]+' ada '+a+' '+name+'. '+A[0]+' beri '+b+' '+name+' kepada '+B[0]+'. Berapa '+name+' yang tinggal?';
+    ex=A[0]+' tinggal '+res+' '+name+'.';
+  }
+  return {prompt:p,say:p,tip:'Baca cerita ini perlahan-lahan.',
+    hint:add?'Cerita ini menambah. Kira semua sekali.':'Cerita ini memberi pergi. Kira yang tinggal sahaja.',explain:ex,
+    build:function(){
+      sizeFor(add?a+b:a);
+      $('stage').appendChild(el('div','story','<span>'+A[1]+'</span><span>'+B[1]+'</span>'));
+      if(add){
+        var eq=el('div','eq');
+        var g1=items(e,a,0);g1.classList.add('g1');
+        var g2=items(e,b,a);g2.classList.add('g2');
+        eq.appendChild(g1);eq.appendChild(g2);
+        $('stage').appendChild(eq);
+      }else{
+        var g=items(e,a,0);
+        $('stage').appendChild(g);
+        setTimeout(function(){
+          var kids=Array.prototype.slice.call(g.children).slice(a-b);
+          kids.forEach(function(x,i){setTimeout(function(){x.classList.add('gone')},i*220)});
+        },900);
+      }
+      choices(numChoices(res,0,L===1?10:20),res);
+    }};
+}
+function qNumWord(L){
+  var max=(L===1)?10:20,n=ri(1,max);
+  if(Math.random()<.5){
+    var wopts=numChoices(n,1,max).map(function(v){return NUMW[v]});
+    return {prompt:'Pilih perkataan bagi nombor ini.',say:'Pilih perkataan bagi nombor '+n+'.',tip:'Sebut nombor itu dahulu.',
+      hint:'Kira dari satu hingga '+n+' dengan jari.',explain:n+' ialah '+NUMW[n]+'.',
+      build:function(){
+        $('stage').appendChild(el('div','bigletter',String(n)));
+        choices(wopts,NUMW[n],function(v){return '<span>'+v+'</span>'},'words');
+      }};
+  }
+  return {prompt:'Nombor manakah yang sama dengan perkataan ini?',say:'Nombor manakah yang sama dengan perkataan '+NUMW[n]+'?',tip:'Baca perkataan itu perlahan-lahan.',
+    hint:'Kira dari satu dengan jari sambil sebut nama nombor.',explain:NUMW[n]+' ialah '+n+'.',
+    build:function(){
+      $('stage').appendChild(el('div','bigword',NUMW[n]));
+      choices(numChoices(n,1,max),n);
+    }};
+}
+function qBalloon(L){
+  var add=Math.random()<.5,a,b,res,txt;
+  if(add){
+    if(L===1){a=ri(1,6);b=ri(1,Math.min(6,10-a))}else{a=ri(4,12);b=ri(3,20-a)}
+    res=a+b;txt=a+' + '+b+' = ?';
+  }else{
+    if(L===1){a=ri(3,10);b=ri(1,a-1)}else{a=ri(8,20);b=ri(2,a-2)}
+    res=a-b;txt=a+' − '+b+' = ?';
+  }
+  var sp=add?a+' tambah '+b:a+' tolak '+b;
+  var p='Pecahkan belon yang ada jawapan betul. '+sp+' sama dengan berapa?';
+  return {prompt:p,say:p,tip:'Ketuk belon yang betul untuk memecahkannya!',
+    hint:add?'Mula dari '+a+', kemudian kira maju '+b+' langkah.':'Mula dari '+a+', kemudian kira undur '+b+' langkah.',
+    explain:sp+' sama dengan '+res+'.',
+    build:function(){
+      $('stage').appendChild(el('div','numeq',txt));
+      choices(numChoices(res,0,L===1?10:20),res,function(v){return '<span>'+v+'</span>'},'balloons');
+    }};
+}
+function mathSet(L){
+  var req=[qCount,qAdd,qSub];
+  var opt=[qSeq,qBig,qCompare,qPattern,qClock,qShape,qStory,qNumWord,qBalloon];
+  var fs=req.concat(shuffle(opt).slice(0,7));
+  return shuffle(fs).map(function(f){return f(L)});
+}
+
+/* Question builders: Bahasa Melayu */
+var WORDS=[
+  ['kucing','ku-cing','🐱'],['ayam','a-yam','🐔'],['bola','bo-la','⚽'],['buku','bu-ku','📖'],
+  ['rumah','ru-mah','🏠'],['bunga','bu-nga','🌸'],['ikan','i-kan','🐟'],['itik','i-tik','🦆'],
+  ['pisang','pi-sang','🍌'],['epal','e-pal','🍎'],['topi','to-pi','🧢'],['bulan','bu-lan','🌙'],
+  ['bintang','bin-tang','⭐'],['katak','ka-tak','🐸'],['lembu','lem-bu','🐄'],['gajah','ga-jah','🐘'],
+  ['kasut','ka-sut','👟'],['baju','ba-ju','👕'],['susu','su-su','🥛'],['roti','ro-ti','🍞'],
+  ['nasi','na-si','🍚'],['pokok','po-kok','🌳'],['payung','pa-yung','☂️'],['kuda','ku-da','🐴'],
+  ['lampu','lam-pu','💡'],['kunci','kun-ci','🔑'],['telur','te-lur','🥚'],['tikus','ti-kus','🐭'],
+  ['kapal','ka-pal','🚢'],['semut','se-mut','🐜'],['ketam','ke-tam','🦀'],
+  ['kereta','ke-re-ta','🚗'],['harimau','ha-ri-mau','🐯'],['basikal','ba-si-kal','🚲'],['telefon','te-le-fon','📱']
+].map(function(a){return {w:a[0],s:a[1].split('-'),e:a[2]}});
+
+var ALPHA='abcdefghijklmnoprstuy'.split('');
+var VOWELS='aeiou'.split('');
+var CONS='bcdfghjklmnprstwy'.split('');
+
+function bigPic(w){return el('div','pic',w.e)}
+
+function qPic(w){
+  var others=shuffle(WORDS.filter(function(x){return x.w!==w.w&&x.w[0]!==w.w[0]})).slice(0,2);
+  var opts=shuffle([w].concat(others)).map(function(x){return x.w});
+  return {prompt:'Apakah nama gambar ini?',say:'Apakah nama gambar ini?',tip:'Lihat gambar dan baca perkataan.',
+    hint:'Perkataan ini bermula dengan huruf '+w.w[0].toUpperCase()+'.',
+    explain:'Ini ialah '+w.w+'.',
+    build:function(){
+      $('stage').appendChild(bigPic(w));
+      choices(opts,w.w,function(v){return '<span>'+v+'</span>'},'words');
+    }};
+}
+function qStart(w){
+  var first=w.w[0];
+  var pool=shuffle(ALPHA.filter(function(c){return c!==first})).slice(0,2);
+  var opts=shuffle([first].concat(pool));
+  return {prompt:'Huruf apakah di depan perkataan ini?',say:'Huruf apakah di depan perkataan ini?',tip:'Sebut perkataan itu perlahan-lahan.',
+    hint:'Sebut perkataan ini: '+w.w+'. Dengar bunyi pertamanya.',
+    explain:w.w+' bermula dengan huruf '+first.toUpperCase()+'.',
+    build:function(){
+      $('stage').appendChild(bigPic(w));
+      var ws=el('div','wordshow');
+      var bl=el('span','blank','?');
+      ws.appendChild(bl);ws.appendChild(document.createTextNode(w.w.slice(1)));
+      $('stage').appendChild(ws);
+      this.blankEl=bl;
+      choices(opts,first,function(v){return '<span>'+v+'</span>'},'');
+    },
+    finish:function(){if(this.blankEl){this.blankEl.textContent=first;this.blankEl.classList.add('filled')}}};
+}
+function qMissing(w,L){
+  var s=w.w,cand=[];
+  for(var i=0;i<s.length;i++){
+    var c=s[i],isNG=(c==='n'&&s[i+1]==='g')||(c==='g'&&s[i-1]==='n');
+    if(isNG)continue;
+    if(L===1&&VOWELS.indexOf(c)<0)continue;
+    cand.push(i);
+  }
+  if(!cand.length)cand=[1];
+  var idx=pick(cand),ch=s[idx],isV=VOWELS.indexOf(ch)>=0;
+  var pool=shuffle((isV?VOWELS:CONS).filter(function(c){return c!==ch})).slice(0,2);
+  var opts=shuffle([ch].concat(pool));
+  return {prompt:'Huruf apakah yang hilang?',say:'Huruf apakah yang hilang?',tip:'Sebut perkataan itu, kemudian pilih huruf.',
+    hint:'Sebut perlahan-lahan: '+w.s.join(' ... ')+'.',
+    explain:'Perkataan yang betul ialah '+w.w+'.',
+    build:function(){
+      $('stage').appendChild(bigPic(w));
+      var ws=el('div','wordshow');
+      ws.appendChild(document.createTextNode(s.slice(0,idx)));
+      var bl=el('span','blank','?');ws.appendChild(bl);
+      ws.appendChild(document.createTextNode(s.slice(idx+1)));
+      $('stage').appendChild(ws);
+      this.blankEl=bl;
+      choices(opts,ch,function(v){return '<span>'+v+'</span>'},'');
+    },
+    finish:function(){if(this.blankEl){this.blankEl.textContent=ch;this.blankEl.classList.add('filled')}}};
+}
+/* Soalan kreatif: Bahasa Melayu */
+var WMAP={};WORDS.forEach(function(x){WMAP[x.w]=x.e});
+var ANTON=[['besar','kecil'],['panas','sejuk'],['tinggi','rendah'],['siang','malam'],['atas','bawah'],['ringan','berat'],['laju','perlahan'],['gemuk','kurus'],['penuh','kosong'],['naik','turun'],['baru','lama'],['bersih','kotor'],['jauh','dekat'],['tebal','nipis'],['buka','tutup'],['ramai','sedikit']];
+var FILLS=[
+  ['Kucing minum ___.','susu',['batu','kasut'],'🐱'],
+  ['Saya memakai ___ ke sekolah.','kasut',['ikan','bulan'],'👟'],
+  ['Ibu memasak ___ di dapur.','nasi',['payung','bola'],'🍚'],
+  ['Kami membaca ___ di perpustakaan.','buku',['pisang','topi'],'📖'],
+  ['Hari hujan, saya bawa ___.','payung',['kasut','roti'],'☂️'],
+  ['Ikan hidup di dalam ___.','air',['pokok','rumah'],'🐟'],
+  ['Burung terbang di ___.','langit',['lantai','dapur'],'🐦'],
+  ['Bulan dan bintang kelihatan pada waktu ___.','malam',['siang','pagi'],'🌙'],
+  ['Matahari terbit pada waktu ___.','pagi',['malam','petang'],'🌅'],
+  ['Adik menendang ___ di padang.','bola',['baju','meja'],'⚽'],
+  ['Lembu memberi kita ___.','susu',['telur','kasut'],'🐄'],
+  ['Saya menggosok ___ setiap pagi.','gigi',['bola','payung'],'😁'],
+  ['Ali menaiki ___ ke sekolah.','basikal',['pisang','awan'],'🚲']
+];
+var RIDDLES=[
+  ['Saya ada belalai yang panjang. Siapa saya?','gajah','🐘'],
+  ['Saya berenang di dalam air dan tidak ada kaki. Siapa saya?','ikan','🐟'],
+  ['Saya bertelur dan berbunyi kok kok kok. Siapa saya?','ayam','🐔'],
+  ['Saya ada empat kaki, misai dan suka makan ikan. Siapa saya?','kucing','🐱'],
+  ['Saya memberi kamu susu. Siapa saya?','lembu','🐄'],
+  ['Saya melompat dan hidup di tepi kolam. Siapa saya?','katak','🐸'],
+  ['Kamu memakai saya di kaki. Siapa saya?','kasut','👟'],
+  ['Kamu membuka saya apabila hujan turun. Siapa saya?','payung','☂️'],
+  ['Kamu membaca saya. Saya ada banyak muka surat. Siapa saya?','buku','📖'],
+  ['Saya ada empat roda dan boleh membawa kamu pergi jauh. Siapa saya?','kereta','🚗'],
+  ['Saya muncul pada waktu malam. Bentuk saya bulat atau sabit. Siapa saya?','bulan','🌙'],
+  ['Saya berkulit kuning dan manis. Monyet suka makan saya. Siapa saya?','pisang','🍌'],
+  ['Saya ada dua roda. Kamu mengayuh saya. Siapa saya?','basikal','🚲'],
+  ['Saya bersinar pada waktu siang dan sangat panas. Siapa saya?','matahari','☀️']
+];
+var SENT1=[[['Ibu','masak','nasi'],'🍲'],[['Adik','main','bola'],'⚽'],[['Ayah','baca','buku'],'📖'],[['Kucing','minum','susu'],'🐱'],[['Ali','makan','roti'],'🍞'],[['Burung','terbang','tinggi'],'🐦']];
+var SENT2=[[['Ali','pergi','ke','sekolah'],'🏫'],[['Ibu','membeli','sayur','di','pasar'],'🥬'],[['Kami','bermain','di','taman'],'🌳'],[['Adik','minum','susu','setiap','pagi'],'🥛'],[['Ayah','memandu','kereta','ke','pejabat'],'🚗'],[['Kucing','tidur','di','atas','meja'],'😺']];
+var HARI=['Isnin','Selasa','Rabu','Khamis','Jumaat','Sabtu','Ahad'];
+
+function qOrder(cfg){
+  var parts=cfg.parts,whole=parts.join(cfg.join);
+  return {prompt:cfg.prompt,say:cfg.prompt,tip:cfg.tip,hint:cfg.hint,explain:cfg.explain,
+    build:function(){
+      var st=$('stage');st.appendChild(el('div','pic',cfg.emoji));
+      var slotsEl=el('div','slots');
+      var slots=parts.map(function(){
+        var d=el('button','slot','');d.type='button';d.setAttribute('aria-label','Petak kosong');
+        slotsEl.appendChild(d);return {el:d,tile:null};
+      });
+      st.appendChild(slotsEl);
+      var order,guard=0;
+      do{order=shuffle(parts)}while(order.join(cfg.join)===whole&&guard++<8);
+      var box=$('answers');box.className='answers tiles';box.innerHTML='';
+      var tiles=order.map(function(t){
+        var b=el('button','tile',t);b.type='button';box.appendChild(b);
+        return {el:b,t:t,slot:null};
+      });
+      function unplace(s){
+        if(S.locked||!s.tile)return;
+        var t=s.tile;t.slot=null;s.tile=null;
+        s.el.textContent='';s.el.classList.remove('filled');t.el.classList.remove('used');
+      }
+      function check(){
+        var guess=slots.map(function(s){return s.tile.t}).join(cfg.join);
+        if(guess===whole){slotsEl.classList.add('right');judge(true,{})}
+        else{
+          slotsEl.classList.add('wrong');
+          judge(false,{});
+          setTimeout(function(){slotsEl.classList.remove('wrong');if(!S.locked)slots.forEach(unplace)},750);
+        }
+      }
+      tiles.forEach(function(tile){
+        tile.el.addEventListener('click',function(){
+          if(S.locked||tile.slot)return;
+          var s=slots.filter(function(x){return !x.tile})[0];
+          if(!s)return;
+          s.tile=tile;tile.slot=s;s.el.textContent=tile.t;s.el.classList.add('filled');tile.el.classList.add('used');
+          sfx('pop');speak(tile.t);
+          if(slots.every(function(x){return x.tile}))check();
+        });
+      });
+      slots.forEach(function(s){s.el.addEventListener('click',function(){unplace(s);sfx('pop')})});
+      this._fill=function(){
+        slots.forEach(function(s,i){s.el.textContent=parts[i];s.el.classList.add('filled')});
+        tiles.forEach(function(t){t.el.classList.add('used')});
+      };
+    },
+    finish:function(){if(this._fill)this._fill()}};
+}
+function qSyl(w){
+  return qOrder({parts:w.s,join:'',emoji:w.e,prompt:'Susun suku kata untuk membentuk perkataan.',
+    tip:'Ketuk suku kata mengikut urutan.',hint:'Sebut perlahan-lahan: '+w.s.join(' ... ')+'.',
+    explain:w.s.join(' ... ')+' menjadi '+w.w+'.'});
+}
+function qSentence(L){
+  var s=pick(L===1?SENT1:SENT2);
+  return qOrder({parts:s[0],join:' ',emoji:s[1],prompt:'Susun perkataan untuk membentuk ayat.',
+    tip:'Ayat bermula dengan huruf besar.',hint:'Siapa? Buat apa? Ayat bermula dengan huruf besar.',
+    explain:s[0].join(' ')+'.'});
+}
+function qAnton(L){
+  var pool=(L===1)?ANTON.slice(0,8):ANTON;
+  var pr=pick(pool),flip=Math.random()<.5,q=flip?pr[1]:pr[0],a=flip?pr[0]:pr[1];
+  var all=[];ANTON.forEach(function(x){all.push(x[0]);all.push(x[1])});
+  var others=shuffle(all.filter(function(w){return w!==q&&w!==a})).slice(0,2);
+  var opts=shuffle([a].concat(others));
+  return {prompt:'Apakah lawan kata bagi "'+q+'"?',say:'Apakah lawan kata bagi '+q+'?',
+    tip:'Lawan kata ialah perkataan yang bertentangan makna.',hint:'Fikir: kalau bukan '+q+', apa dia?',
+    explain:'Lawan kata bagi '+q+' ialah '+a+'.',
+    build:function(){
+      $('stage').appendChild(el('div','bigword',q+' ⇄ ?'));
+      choices(opts,a,function(v){return '<span>'+v+'</span>'},'words');
+    }};
+}
+function qFill(){
+  var f=pick(FILLS),parts=f[0].split('___'),ans=f[1],opts=shuffle([ans].concat(f[2]));
+  var full=parts[0]+ans+parts[1];
+  return {prompt:'Pilih perkataan yang sesuai untuk melengkapkan ayat.',say:'Pilih perkataan yang sesuai untuk melengkapkan ayat.',
+    tip:'Baca ayat itu perlahan-lahan.',hint:'Baca ayat itu semula. Perkataan mana yang membuat ayat masuk akal?',
+    explain:full,
+    build:function(){
+      $('stage').appendChild(el('div','pic',f[3]));
+      var ws=el('div','wordshow sentence');
+      ws.appendChild(document.createTextNode(parts[0]));
+      var bl=el('span','blank','?');ws.appendChild(bl);
+      ws.appendChild(document.createTextNode(parts[1]));
+      $('stage').appendChild(ws);
+      this.blankEl=bl;
+      choices(opts,ans,function(v){return '<span>'+v+'</span>'},'words');
+    },
+    finish:function(){if(this.blankEl){this.blankEl.textContent=ans;this.blankEl.classList.add('filled')}}};
+}
+function qRiddle(){
+  var r=pick(RIDDLES),ans=r[1];
+  var others=shuffle(RIDDLES.filter(function(x){return x[1]!==ans})).slice(0,2);
+  var emo={};emo[ans]=r[2];others.forEach(function(x){emo[x[1]]=x[2]});
+  var opts=shuffle([ans,others[0][1],others[1][1]]);
+  return {prompt:r[0],say:r[0],tip:'Dengar teka-teki ini, kemudian pilih jawapan.',
+    hint:'Jawapannya bermula dengan huruf '+ans.charAt(0).toUpperCase()+'.',
+    explain:'Jawapannya ialah '+ans+'.',
+    build:function(){
+      $('stage').appendChild(el('div','pic','❓'));
+      choices(opts,ans,function(v){return '<span class="bign">'+emo[v]+'</span><span class="cap">'+v+'</span>'},'');
+    }};
+}
+function qSylCount(w){
+  var n=w.s.length;
+  return {prompt:'Tepuk tangan! Berapa suku kata dalam perkataan ini?',say:'Berapa suku kata dalam perkataan '+w.w+'?',
+    tip:'Sebut perlahan-lahan dan tepuk setiap bunyi.',hint:'Sebut dan tepuk: '+w.s.join(' - ')+'.',
+    explain:w.w+' ada '+n+' suku kata: '+w.s.join(' ... ')+'.',
+    build:function(){
+      $('stage').appendChild(el('div','pic',w.e));
+      $('stage').appendChild(el('div','bigword',w.w));
+      choices(shuffle([1,2,3]),n,function(v){return '<span class="bign">'+v+'</span>'},'');
+    }};
+}
+function qStartSyl(w){
+  var sy=w.s[0];
+  var others=shuffle(WORDS.filter(function(x){return x.w.indexOf(sy)!==0})).slice(0,2);
+  var opts=shuffle([w].concat(others)).map(function(x){return x.w});
+  return {prompt:'Perkataan manakah bermula dengan suku kata "'+sy+'"?',say:'Perkataan manakah bermula dengan suku kata '+sy+'?',
+    tip:'Sebut suku kata itu dahulu.',hint:'Cari perkataan yang bermula dengan bunyi '+sy+'.',
+    explain:w.w+' bermula dengan '+sy+'.',
+    build:function(){
+      $('stage').appendChild(el('div','bigletter',sy));
+      choices(opts,w.w,function(v){return '<span class="bign">'+WMAP[v]+'</span><span class="cap">'+v+'</span>'},'');
+    }};
+}
+function qCase(L){
+  var AL='abcdefghijklmnopqrstuvwxyz'.split('');
+  var c=pick(AL),toLower=(L===1)?true:Math.random()<.5;
+  var CONF={b:'d',d:'b',p:'q',q:'p',m:'n',n:'m',u:'v',v:'u'};
+  var d1=CONF[c]?[CONF[c]]:[];
+  var rest=shuffle(AL.filter(function(x){return x!==c&&d1.indexOf(x)<0}));
+  var ds=d1.concat(rest).slice(0,2);
+  var f=function(x){return toLower?x:x.toUpperCase()};
+  var opts=shuffle([c].concat(ds)).map(f);
+  var shown=toLower?c.toUpperCase():c;
+  var p=toLower?'Pilih huruf kecil bagi huruf besar ini.':'Pilih huruf besar bagi huruf kecil ini.';
+  return {prompt:p,say:p,tip:'Huruf besar dan huruf kecil ialah pasangan.',
+    hint:'Lihat bentuk huruf itu dengan teliti.',
+    explain:'Pasangan huruf ialah '+c.toUpperCase()+' dan '+c+'.',
+    build:function(){
+      $('stage').appendChild(el('div','bigletter',shown));
+      choices(opts,f(c),function(v){return '<span>'+v+'</span>'},'');
+    }};
+}
+function qHari(L){
+  var i=ri(0,6),off=(L===1)?1:2,after=Math.random()<.5,j=(i+(after?off:-off)+14)%7,ans=HARI[j];
+  var others=shuffle(HARI.filter(function(h){return h!==ans&&h!==HARI[i]})).slice(0,2);
+  var opts=shuffle([ans].concat(others));
+  var ph=(off===1?'':'dua hari ')+(after?'selepas':'sebelum');
+  var p='Hari apakah '+ph+' hari '+HARI[i]+'?';
+  return {prompt:p,say:p,tip:'Lihat jalur hari dalam seminggu.',
+    hint:'Hari dalam seminggu: Isnin, Selasa, Rabu, Khamis, Jumaat, Sabtu, Ahad.',
+    explain:ph.charAt(0).toUpperCase()+ph.slice(1)+' hari '+HARI[i]+' ialah hari '+ans+'.',
+    build:function(){
+      var row=el('div','seq days'),self=this;
+      this.boxes=HARI.map(function(h,k){
+        var b=el('div','nbox'+(k===i?' mark':''),h.slice(0,3));
+        row.appendChild(b);return b;
+      });
+      $('stage').appendChild(row);
+      choices(opts,ans,function(v){return '<span style="font-size:1.6rem">'+v+'</span>'},'words');
+    },
+    finish:function(){if(this.boxes)this.boxes[j].classList.add('ans')}};
+}
+function bmSet(L){
+  var used={};
+  function take(f){
+    var c=shuffle(WORDS).filter(function(w){return !used[w.w]&&(!f||f(w))});
+    var w=c[0]||shuffle(WORDS).filter(function(x){return !used[x.w]})[0];
+    used[w.w]=1;return w;
+  }
+  function easy(){return take(function(w){return L===2||w.s.length===2})}
+  var qs=[];
+  qs.push(qSyl(take(L===1?function(w){return w.s.length===2}:function(w){return w.s.length===3})));
+  qs.push(qPic(easy()));
+  var others=[
+    function(){return qStart(easy())},
+    function(){return qMissing(easy(),L)},
+    function(){return qSentence(L)},
+    function(){return qAnton(L)},
+    function(){return qFill()},
+    function(){return qRiddle()},
+    function(){return qSylCount(take())},
+    function(){return qStartSyl(take())},
+    function(){return qCase(L)},
+    function(){return qHari(L)}
+  ];
+  shuffle(others).slice(0,8).forEach(function(f){qs.push(f())});
+  return shuffle(qs);
+}
+
+/* Flow */
+var NOTES={
+  1:'Mudah: nombor hingga 10, jam tepat, perkataan dua suku kata, ayat pendek.',
+  2:'Cabaran: nombor hingga 20, setengah jam, lompat nombor, ayat lebih panjang.'
+};
+function paintLevel(){
+  $('levelNote').textContent=NOTES[S.level];
+  Array.prototype.forEach.call(document.querySelectorAll('.segbtn'),function(b){
+    var on=(+b.dataset.level===S.level);
+    b.classList.toggle('on',on);b.setAttribute('aria-pressed',on?'true':'false');
+  });
+}
+function paintDots(){
+  var box=$('progress');box.innerHTML='';
+  S.qs.forEach(function(q,i){
+    var d=document.createElement('i');
+    if(S.res[i]===1)d.className='ok';
+    else if(S.res[i]===0)d.className='miss';
+    else if(i===S.i)d.className='cur';
+    box.appendChild(d);
+  });
+}
+function loadQ(){
+  var q=S.qs[S.i];
+  S.tries=0;S.locked=false;S.count=0;
+  $('stage').innerHTML='';$('stage').style.removeProperty('--sz');
+  $('answers').innerHTML='';$('answers').className='answers';
+  $('nextWrap').hidden=true;
+  $('promptText').textContent=q.prompt;
+  q.build();
+  paintDots();
+  say(q.tip||pick(TIPS));
+}
+function start(subject){
+  S.subject=subject;S.qs=(subject==='math')?mathSet(S.level):bmSet(S.level);
+  S.i=0;S.score=0;S.res=[];
+  show('game');loadQ();
+}
+function finishRound(){
+  var n=S.qs.length;
+  var stars=(S.score>=n-1)?3:(S.score>=Math.ceil(n*.6)?2:1);
+  totalStars+=stars;save('mp.stars',String(totalStars));paintStars();
+  var box=$('resStars');box.innerHTML='';
+  for(var i=0;i<3;i++){
+    var h=STAR.replace('%C',i<stars?'on':'off');
+    var w=document.createElement('span');w.innerHTML=h;
+    var svg=w.firstChild;svg.style.setProperty('--d',(0.25+i*0.3)+'s');
+    box.appendChild(svg);
+  }
+  $('resTitle').textContent=stars===3?'Hebat sekali! Kamu bintang kelas!':stars===2?'Bagus! Hampir tiga bintang!':'Terima kasih kerana berusaha!';
+  $('resText').textContent='Betul '+S.score+' daripada '+n+' pada percubaan pertama. Kamu dapat '+stars+' bintang.';
+  show('result');
+  var rc=$('resCoach');rc.classList.remove('happy');void rc.offsetWidth;rc.classList.add('happy');
+  sfx('win');confetti(stars===3?60:30);
+  speak(stars===3?'Hebat sekali!':'Syabas!');
+}
+
+Array.prototype.forEach.call(document.querySelectorAll('.segbtn'),function(b){
+  b.addEventListener('click',function(){S.level=+b.dataset.level;paintLevel();sfx('pop')});
+});
+Array.prototype.forEach.call(document.querySelectorAll('.subject'),function(b){
+  b.addEventListener('click',function(){sfx('pop');start(b.dataset.subject)});
+});
+$('speakBtn').addEventListener('click',function(){
+  var q=S.qs[S.i];if(!q)return;
+  var wasMuted=muted;muted=false;speak(q.say);muted=wasMuted;
+});
+$('nextBtn').addEventListener('click',function(){
+  sfx('pop');
+  S.i++;
+  if(S.i>=S.qs.length)finishRound();else loadQ();
+});
+$('backBtn').addEventListener('click',function(){
+  try{window.speechSynthesis.cancel()}catch(e){}
+  show('home');
+});
+$('againBtn').addEventListener('click',function(){start(S.subject)});
+$('menuBtn').addEventListener('click',function(){show('home')});
+paintLevel();
+})();
+</script>
+</body>
+</html>
