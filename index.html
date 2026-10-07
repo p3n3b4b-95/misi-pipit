@@ -37,7 +37,7 @@ body{
 }
 button{font:inherit;color:inherit;touch-action:manipulation;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none;-webkit-appearance:none;appearance:none;cursor:pointer}
 button:focus-visible{outline:4px solid var(--berry);outline-offset:3px}
-h1,h2,p{margin:0}
+h1,h2,h3,p{margin:0}
 
 /* Scene */
 .scene{position:fixed;top:0;left:0;right:0;bottom:0;overflow:hidden;pointer-events:none;z-index:0;background:linear-gradient(var(--sky) 0%,var(--sky-pale) 75%)}
@@ -226,6 +226,53 @@ h1,h2,p{margin:0}
 .stars .star{width:48px;height:48px;max-width:none}
 .stars .star.off{fill:#fff;stroke:var(--sky-deep)}
 .chip.bump{animation:pop .4s}
+
+/* Profil dan Papan Pemuka */
+.row .whoami{flex:1}
+.whoami{display:flex;align-items:center;gap:10px;background:#fff;border:0;border-radius:999px;padding:6px 16px 6px 6px;box-shadow:0 4px 0 var(--sky-deep);text-align:left;min-width:0;max-width:100%}
+.av{flex:none;width:44px;height:44px;border-radius:50%;background:var(--sun);display:grid;place-items:center;font-size:1.7rem;line-height:1;font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif}
+.who{display:flex;flex-direction:column;min-width:0;line-height:1.15}
+.who b{font-family:var(--f-display);font-weight:800;font-size:1.15rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.who small{font-size:.8rem;font-weight:700;color:var(--berry-deep)}
+.boardbtn{width:100%;margin-top:14px}
+.topbar h2.ptitle{flex:1;text-align:center;font-family:var(--f-display);font-weight:800;font-size:1.7rem;line-height:1.1}
+.topbar .ptitle+.ghost{width:76px;flex:none}
+.panel{margin-top:14px;background:#fff;border-radius:28px;padding:18px;box-shadow:0 8px 0 rgba(29,39,96,.14)}
+.pnote{font-weight:700;margin-bottom:12px}
+.plist{display:flex;flex-direction:column;gap:10px}
+.prowwrap{background:var(--soft);border-radius:20px;padding:6px}
+.prowwrap.on{background:#D9F3E3;outline:3px solid var(--grass-deep)}
+.prow-main{display:flex;align-items:center;gap:8px}
+.prow{flex:1;min-width:0;display:flex;align-items:center;gap:12px;border:0;background:transparent;text-align:left;padding:6px;border-radius:16px}
+.prow .nm,.brow .nm{display:block;font-family:var(--f-display);font-weight:800;font-size:1.25rem;line-height:1.1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.prow .meta,.brow .meta{display:block;font-size:.9rem;font-weight:700}
+.prow .txt,.brow .txt{min-width:0;flex:1}
+.pmore{flex:none;min-height:44px;padding:0 14px;border:0;border-radius:14px;background:#fff;font-family:var(--f-display);font-weight:800;box-shadow:0 3px 0 var(--sky-deep)}
+.pmanage{display:flex;flex-wrap:wrap;gap:10px;padding:10px 6px 6px}
+.btn.small{font-size:1rem;padding:10px 16px;border-radius:14px;box-shadow:0 4px 0 var(--berry-deep)}
+.btn.small.light{box-shadow:0 4px 0 var(--sky-deep)}
+.btn.coral{background:#C93B2F;box-shadow:0 4px 0 #8F2A21}
+.subh{font-family:var(--f-display);font-weight:800;font-size:1.25rem;margin:20px 0 8px}
+.flab{display:block;font-weight:700;margin-bottom:6px}
+.field{width:100%;font:inherit;font-size:1.2rem;font-weight:700;padding:12px 14px;border:4px solid var(--sky-deep);border-radius:16px;color:var(--ink);background:#fff}
+.field:focus-visible{outline:4px solid var(--berry);outline-offset:2px}
+.avpick{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 4px}
+.avopt{width:52px;height:52px;border-radius:50%;border:4px solid transparent;background:var(--soft);font-size:1.7rem;display:grid;place-items:center;line-height:1;font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif}
+.avopt[aria-pressed="true"]{border-color:var(--berry);background:#EFEAFF}
+.err{min-height:1.4em;font-weight:700;color:#B3261E;margin:6px 0 8px}
+.fine{margin-top:12px;font-size:.9rem}
+.panel .seg{background:var(--soft)}
+.seg.seg3{grid-template-columns:repeat(3,1fr)}
+.tabbtn{border:0;background:transparent;border-radius:16px;padding:10px 6px;font-family:var(--f-display);font-weight:800;font-size:1.1rem;color:var(--ink)}
+.tabbtn.on{background:var(--ink);color:#fff}
+.blist{list-style:none;margin:14px 0 0;padding:0;display:flex;flex-direction:column;gap:8px}
+.brow{display:flex;align-items:center;gap:10px;background:var(--soft);border-radius:18px;padding:8px 12px}
+.brow.me{background:#FFF1C2;outline:3px solid var(--sun-deep)}
+.rk{flex:none;width:40px;text-align:center;font-family:var(--f-display);font-weight:800;font-size:1.5rem;line-height:1}
+.sc{flex:none;font-family:var(--f-display);font-weight:800;font-size:1.4rem;text-align:right;line-height:1.1}
+.empty{text-align:center;padding:18px 8px;font-weight:700}
+.rankline{font-weight:700;font-size:1.05rem}
+.rankline:empty{display:none}
 .stars .star.on{animation:starpop .6s backwards;animation-delay:var(--d)}
 .resultcard .btns{display:flex;flex-direction:column;gap:12px;width:min(100%,340px);margin-top:6px}
 
@@ -278,7 +325,10 @@ h1,h2,p{margin:0}
       </div>
       <button class="iconbtn mutebtn" type="button" aria-label="Bunyi" aria-pressed="false"></button>
     </header>
-    <div class="row"><span class="chip"><svg class="star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3 6.1 20.6l1.3-6.6L2.5 9.4l6.6-.8z"/></svg><span class="startotal">0</span> bintang</span></div>
+    <div class="row">
+      <button class="whoami" type="button" id="whoBtn"><span class="av" id="whoAv" aria-hidden="true">👤</span><span class="who"><b id="whoName">Pilih pemain</b><small>Tukar pemain</small></span></button>
+      <span class="chip"><svg class="star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3 6.1 20.6l1.3-6.6L2.5 9.4l6.6-.8z"/></svg><span class="startotal">0</span></span>
+    </div>
 
     <h2 class="lbl">Pilih tahap</h2>
     <div class="seg" role="group" aria-label="Pilih tahap">
@@ -298,7 +348,8 @@ h1,h2,p{margin:0}
         <span class="stext"><strong>Baca &amp; Eja</strong><span>Bahasa Melayu</span></span>
       </button>
     </div>
-    <p class="teachernote">Setiap pusingan ada 10 soalan. Jawapan betul pada percubaan pertama dapat 1 bintang, jadi bilangan bintang sama dengan markah murid. Murid boleh cuba dua kali dan Pipit beri petunjuk selepas jawapan salah, tetapi bintang tidak diberi. Tiada markah negatif.</p>
+    <button class="btn light boardbtn" type="button" id="boardBtn">Papan Pemuka</button>
+    <p class="teachernote">Setiap pusingan ada 10 soalan. Jawapan betul pada percubaan pertama dapat 1 bintang, jadi bilangan bintang sama dengan markah murid. Murid boleh cuba dua kali dan Pipit beri petunjuk selepas jawapan salah, tetapi bintang tidak diberi. Tiada markah negatif. Setiap murid ada profil sendiri, dan Papan Pemuka menunjukkan kedudukan mengikut skor tertinggi.</p>
   </section>
 
   <section id="game" hidden>
@@ -334,10 +385,54 @@ h1,h2,p{margin:0}
       <div class="stars" id="resStars" aria-hidden="true"></div>
       <h2 id="resTitle"></h2>
       <p id="resText"></p>
+      <p class="rankline" id="resRank"></p>
       <div class="btns">
         <button class="btn green" type="button" id="againBtn">Main lagi</button>
+        <button class="btn light" type="button" id="resBoardBtn">Papan Pemuka</button>
         <button class="btn light" type="button" id="menuBtn">Menu utama</button>
       </div>
+    </div>
+  </section>
+
+  <section id="profiles" hidden>
+    <div class="topbar">
+      <button class="pill" type="button" id="profBack"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>Menu</button>
+      <h2 class="ptitle">Pemain</h2>
+      <span class="ghost" aria-hidden="true"></span>
+    </div>
+    <div class="panel">
+      <p class="pnote" id="profNote"></p>
+      <div class="plist" id="profList"></div>
+      <h3 class="subh">Tambah pemain</h3>
+      <label class="flab" for="nameInp">Nama</label>
+      <input class="field" id="nameInp" type="text" maxlength="12" autocomplete="off" placeholder="Contoh: Aina">
+      <div class="avpick" id="avPick" role="group" aria-label="Pilih avatar"></div>
+      <p class="err" id="profErr" aria-live="polite"></p>
+      <button class="btn green" type="button" id="addProf">Tambah pemain</button>
+      <h3 class="subh">Untuk guru</h3>
+      <button class="btn light small" type="button" id="resetAll">Kosongkan semua skor</button>
+      <p class="fine">Skor disimpan pada peranti dan pelayar ini sahaja. Jika data pelayar dipadam, skor turut hilang.</p>
+    </div>
+  </section>
+
+  <section id="board" hidden>
+    <div class="topbar">
+      <button class="pill" type="button" id="boardBack"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>Menu</button>
+      <h2 class="ptitle">Papan Pemuka</h2>
+      <span class="ghost" aria-hidden="true"></span>
+    </div>
+    <div class="panel">
+      <div class="seg seg3" role="group" aria-label="Kategori" id="boardTabs">
+        <button class="tabbtn on" type="button" data-tab="math" aria-pressed="true">Matematik</button>
+        <button class="tabbtn" type="button" data-tab="bm" aria-pressed="false">BM</button>
+        <button class="tabbtn" type="button" data-tab="stars" aria-pressed="false">Bintang</button>
+      </div>
+      <div class="seg" role="group" aria-label="Tahap" id="boardLevels" style="margin-top:10px">
+        <button class="tabbtn on" type="button" data-bl="1" aria-pressed="true">Mudah</button>
+        <button class="tabbtn" type="button" data-bl="2" aria-pressed="false">Cabaran</button>
+      </div>
+      <ol class="blist" id="boardList"></ol>
+      <p class="fine" id="boardNote"></p>
     </div>
   </section>
 
@@ -353,9 +448,18 @@ var pick=function(a){return a[ri(0,a.length-1)]};
 var reduceMotion=false;
 try{reduceMotion=window.matchMedia('(prefers-reduced-motion: reduce)').matches}catch(e){}
 
-var muted=false,totalStars=0;
-try{muted=localStorage.getItem('mp.muted')==='1';totalStars=parseInt(localStorage.getItem('mp.stars'),10)||0}catch(e){}
+var muted=false;
+try{muted=localStorage.getItem('mp.muted')==='1'}catch(e){}
 function save(k,v){try{localStorage.setItem(k,v)}catch(e){}}
+
+/* Data pemain: setiap profil ada bintang dan sejarah pusingan sendiri */
+var DB={profiles:[],active:null};
+try{
+  var rawDB=localStorage.getItem('mp.v2');
+  if(rawDB){var dd=JSON.parse(rawDB);if(dd&&Array.isArray(dd.profiles))DB=dd}
+}catch(e){}
+function saveDB(){save('mp.v2',JSON.stringify(DB))}
+function me(){for(var i=0;i<DB.profiles.length;i++){if(DB.profiles[i].id===DB.active)return DB.profiles[i]}return null}
 
 /* Mascot */
 var MASCOT='<svg viewBox="0 0 120 120" aria-hidden="true"><ellipse class="shadow" cx="60" cy="110" rx="28" ry="5"/><g class="bird"><path class="feet" d="M48 96v10M42 106h12M72 96v10M66 106h12"/><g class="wing wl"><ellipse class="wingf" cx="21" cy="68" rx="10" ry="21" transform="rotate(18 21 68)"/></g><g class="wing wr"><ellipse class="wingf" cx="99" cy="68" rx="10" ry="21" transform="rotate(-18 99 68)"/></g><ellipse class="bodyf" cx="60" cy="64" rx="40" ry="38"/><ellipse class="belly" cx="60" cy="78" rx="26" ry="22"/><path class="tuft" d="M52 28q2-12 8-4M60 26q4-14 10-6M68 30q6-8 10-2"/><circle class="cheek" cx="34" cy="70" r="6"/><circle class="cheek" cx="86" cy="70" r="6"/><g class="eyes"><circle cx="46" cy="54" r="11" fill="#fff"/><circle cx="74" cy="54" r="11" fill="#fff"/><circle cx="48" cy="56" r="6" fill="#1D2760"/><circle cx="72" cy="56" r="6" fill="#1D2760"/><circle cx="50" cy="53" r="2" fill="#fff"/><circle cx="74" cy="53" r="2" fill="#fff"/></g><path class="beak" d="M53 65h14l-7 10z"/></g></svg>';
@@ -445,8 +549,13 @@ var PRAISE=['Betul! Hebat!','Pandai! Teruskan!','Bagus sekali!','Wah, tepat seka
 var TIPS=['Jom cuba soalan ini!','Fikir dahulu, kemudian pilih.','Kamu boleh buat!','Perlahan-lahan, tak apa.'];
 
 function show(id){
-  ['home','game','result'].forEach(function(s){$(s).hidden=(s!==id)});
+  ['home','game','result','profiles','board'].forEach(function(s){$(s).hidden=(s!==id)});
   window.scrollTo(0,0);
+}
+function addStar(){
+  var m=me();
+  if(m){m.stars++;saveDB()}
+  paintStars();bumpStar();
 }
 function bumpStar(){
   var c=document.querySelector('#game .chip');
@@ -454,7 +563,8 @@ function bumpStar(){
   c.classList.remove('bump');void c.offsetWidth;c.classList.add('bump');
 }
 function paintStars(){
-  Array.prototype.forEach.call(document.querySelectorAll('.startotal'),function(e){e.textContent=totalStars});
+  var m=me();
+  Array.prototype.forEach.call(document.querySelectorAll('.startotal'),function(e){e.textContent=m?m.stars:0});
 }
 paintStars();
 
@@ -512,7 +622,7 @@ function judge(ok,o){
   if(ok){
     S.locked=true;
     var first=(S.tries===0);
-    if(first){S.score++;totalStars++;save('mp.stars',String(totalStars));paintStars();bumpStar()}
+    if(first){S.score++;addStar()}
     S.res[S.i]=first?1:0;
     if(o.el)o.el.classList.add('right');
     if(q.finish)q.finish();
@@ -1357,7 +1467,8 @@ function loadQ(){
   say(q.tip||pick(TIPS));
 }
 function start(subject){
-  S.subject=subject;S.qs=(subject==='math')?mathSet(S.level):bmSet(S.level);
+  if(!me()){openProfiles('Pilih atau buat pemain dahulu supaya skor disimpan.');return}
+  S.subject=subject;S.pl=S.level;S.qs=(subject==='math')?mathSet(S.level):bmSet(S.level);
   S.i=0;S.score=0;S.res=[];
   show('game');loadQ();
 }
@@ -1373,6 +1484,17 @@ function finishRound(){
   }
   $('resTitle').textContent=sc===n?'Sempurna! Semua betul!':sc>=Math.ceil(n*.8)?'Hebat sekali! Kamu bintang kelas!':sc>=Math.ceil(n*.5)?'Bagus! Teruskan berusaha!':'Terima kasih kerana berusaha! Jom cuba lagi.';
   $('resText').textContent='Skor: '+sc+' / '+n+'. Kamu dapat '+sc+' bintang, satu bintang bagi setiap jawapan betul pada percubaan pertama.';
+  var m=me(),prev=m?bestOf(m,S.subject,S.pl):null,rk='';
+  if(m){
+    m.rounds.push({s:S.subject,l:S.pl,sc:sc,t:Date.now()});
+    if(m.rounds.length>200)m.rounds=m.rounds.slice(-200);
+    saveDB();
+    var rows=boardRows(S.subject,S.pl),mine=null;
+    rows.forEach(function(r){if(r.p===m)mine=r});
+    if(mine)rk='Kedudukan '+mine.rank+' daripada '+rows.length+' pemain ('+SUBJ[S.subject]+', '+LVL[S.pl]+').';
+    if(sc>0&&(!prev||sc>prev.sc))rk='Rekod baharu untuk kamu! '+rk;
+  }
+  $('resRank').textContent=rk;
   show('result');
   var rc=$('resCoach');rc.classList.remove('happy');void rc.offsetWidth;rc.classList.add('happy');
   sfx('win');confetti(sc>=Math.ceil(n*.8)?60:sc>=Math.ceil(n*.5)?30:12);
@@ -1385,6 +1507,163 @@ Array.prototype.forEach.call(document.querySelectorAll('.segbtn'),function(b){
 Array.prototype.forEach.call(document.querySelectorAll('.subject'),function(b){
   b.addEventListener('click',function(){sfx('pop');start(b.dataset.subject)});
 });
+
+/* Profil dan kedudukan */
+var SUBJ={math:'Matematik',bm:'Bahasa Melayu'},LVL={1:'Mudah',2:'Cabaran'};
+var AVATARS=['🐱','🐶','🐰','🐸','🦊','🐼','🐯','🦁','🐵','🐧','🐢','🦄'];
+var B={tab:'math',level:1},newAv=AVATARS[0],openManage=null;
+function bestOf(p,s,l){
+  var b=null;
+  p.rounds.forEach(function(r){if(r.s===s&&r.l===l&&(b===null||r.sc>b.sc))b={sc:r.sc,t:r.t}});
+  return b;
+}
+function countRounds(p,s,l){return p.rounds.filter(function(r){return r.s===s&&r.l===l}).length}
+function rankRows(rows){
+  rows.forEach(function(r,i){r.rank=(i>0&&rows[i-1].sc===r.sc)?rows[i-1].rank:i+1});
+  return rows;
+}
+function boardRows(s,l){
+  var rows=[];
+  DB.profiles.forEach(function(p){var b=bestOf(p,s,l);if(b)rows.push({p:p,sc:b.sc,t:b.t,n:countRounds(p,s,l)})});
+  rows.sort(function(a,b){return b.sc-a.sc||a.t-b.t});
+  return rankRows(rows);
+}
+function starRows(){
+  var rows=DB.profiles.map(function(p){return {p:p,sc:p.stars,n:p.rounds.length}});
+  rows.sort(function(a,b){return b.sc-a.sc||a.p.name.localeCompare(b.p.name)});
+  return rankRows(rows);
+}
+function paintWho(){
+  var m=me();
+  $('whoAv').textContent=m?m.av:'👤';
+  $('whoName').textContent=m?m.name:'Pilih pemain';
+}
+function armBtn(btn,fn){
+  var label=btn.textContent,t=null;
+  btn.addEventListener('click',function(){
+    if(btn.dataset.arm){clearTimeout(t);delete btn.dataset.arm;btn.textContent=label;fn();return}
+    btn.dataset.arm='1';btn.textContent='Tekan lagi untuk sahkan';
+    t=setTimeout(function(){delete btn.dataset.arm;btn.textContent=label},3500);
+  });
+}
+function renderAvatars(){
+  var box=$('avPick');box.innerHTML='';
+  AVATARS.forEach(function(a){
+    var b=el('button','avopt');b.type='button';b.textContent=a;
+    b.setAttribute('aria-pressed',a===newAv?'true':'false');
+    b.setAttribute('aria-label','Avatar '+a);
+    b.addEventListener('click',function(){newAv=a;sfx('pop');renderAvatars()});
+    box.appendChild(b);
+  });
+}
+function renderProfiles(){
+  var list=$('profList');list.innerHTML='';
+  if(!DB.profiles.length){list.appendChild(el('p','empty','Belum ada pemain. Tambah pemain pertama di bawah.'));return}
+  DB.profiles.forEach(function(p){
+    var wrap=el('div','prowwrap'+(p.id===DB.active?' on':''));
+    var row=el('div','prow-main');
+    var sel=el('button','prow');sel.type='button';
+    var av=el('span','av');av.textContent=p.av;
+    var tx=el('span','txt');
+    var nm=el('span','nm');nm.textContent=p.name;
+    var meta=el('span','meta');meta.textContent=p.stars+' bintang, '+p.rounds.length+' pusingan';
+    tx.appendChild(nm);tx.appendChild(meta);sel.appendChild(av);sel.appendChild(tx);
+    sel.setAttribute('aria-pressed',p.id===DB.active?'true':'false');
+    sel.addEventListener('click',function(){
+      DB.active=p.id;saveDB();paintWho();paintStars();sfx('ok');show('home');
+    });
+    var more=el('button','pmore');more.type='button';more.textContent='Urus';
+    more.setAttribute('aria-expanded',openManage===p.id?'true':'false');
+    more.setAttribute('aria-label','Urus profil '+p.name);
+    more.addEventListener('click',function(){openManage=(openManage===p.id)?null:p.id;renderProfiles()});
+    row.appendChild(sel);row.appendChild(more);wrap.appendChild(row);
+    if(openManage===p.id){
+      var mg=el('div','pmanage');
+      var rs=el('button','btn small light');rs.type='button';rs.textContent='Reset skor';
+      armBtn(rs,function(){p.stars=0;p.rounds=[];saveDB();paintStars();renderProfiles()});
+      var dl=el('button','btn small coral');dl.type='button';dl.textContent='Padam profil';
+      armBtn(dl,function(){
+        DB.profiles=DB.profiles.filter(function(x){return x!==p});
+        if(DB.active===p.id)DB.active=DB.profiles.length?DB.profiles[0].id:null;
+        openManage=null;saveDB();paintWho();paintStars();renderProfiles();
+      });
+      mg.appendChild(rs);mg.appendChild(dl);wrap.appendChild(mg);
+    }
+    list.appendChild(wrap);
+  });
+}
+function openProfiles(note){
+  $('profNote').textContent=note||'Pilih pemain untuk bermain.';
+  $('profErr').textContent='';
+  renderAvatars();renderProfiles();show('profiles');
+}
+function addProfile(){
+  var inp=$('nameInp'),name=inp.value.replace(/\s+/g,' ').trim(),err=$('profErr');
+  if(!name){err.textContent='Taip nama pemain dahulu.';inp.focus();return}
+  var dup=DB.profiles.some(function(p){return p.name.toLowerCase()===name.toLowerCase()});
+  if(dup){err.textContent='Nama itu sudah ada. Guna nama lain, contohnya tambah huruf pertama nama bapa.';inp.focus();return}
+  var p={id:'p'+Date.now().toString(36)+ri(100,999),name:name,av:newAv,stars:0,rounds:[]};
+  DB.profiles.push(p);DB.active=p.id;saveDB();
+  inp.value='';err.textContent='';
+  var free=AVATARS.filter(function(a){return !DB.profiles.some(function(x){return x.av===a})});
+  newAv=free.length?pick(free):pick(AVATARS);
+  paintWho();paintStars();sfx('ok');show('home');
+}
+function renderBoard(){
+  Array.prototype.forEach.call($('boardTabs').children,function(b){
+    var on=b.dataset.tab===B.tab;b.classList.toggle('on',on);b.setAttribute('aria-pressed',on?'true':'false');
+  });
+  Array.prototype.forEach.call($('boardLevels').children,function(b){
+    var on=+b.dataset.bl===B.level;b.classList.toggle('on',on);b.setAttribute('aria-pressed',on?'true':'false');
+  });
+  $('boardLevels').hidden=(B.tab==='stars');
+  var stars=(B.tab==='stars'),rows=stars?starRows():boardRows(B.tab,B.level);
+  var list=$('boardList');list.innerHTML='';
+  if(!rows.length){
+    var li0=el('li','empty','Belum ada skor di sini. Main satu pusingan dahulu!');
+    list.appendChild(li0);
+  }
+  rows.forEach(function(r){
+    var li=el('li','brow'+(r.p.id===DB.active?' me':''));
+    var rk=el('span','rk');rk.textContent=(r.rank<=3?['🥇','🥈','🥉'][r.rank-1]:String(r.rank));
+    rk.setAttribute('aria-label','Kedudukan '+r.rank);
+    var av=el('span','av');av.textContent=r.p.av;
+    var tx=el('span','txt'),nm=el('span','nm'),meta=el('span','meta');
+    nm.textContent=r.p.name;
+    meta.textContent=r.n+' pusingan'+(stars?'':' ('+LVL[B.level]+')');
+    tx.appendChild(nm);tx.appendChild(meta);
+    var sc=el('span','sc');sc.textContent=stars?(r.sc+' bintang'):(r.sc+' / 10');
+    li.appendChild(rk);li.appendChild(av);li.appendChild(tx);li.appendChild(sc);
+    list.appendChild(li);
+  });
+  $('boardNote').textContent=stars
+    ?'Kedudukan ikut jumlah bintang yang dikumpul.'
+    :'Kedudukan ikut skor tertinggi dalam satu pusingan. Skor sama dapat kedudukan sama.';
+}
+function openBoard(tab,level){
+  if(tab)B.tab=tab;
+  B.level=level||S.level;
+  renderBoard();show('board');
+}
+Array.prototype.forEach.call($('boardTabs').children,function(b){
+  b.addEventListener('click',function(){B.tab=b.dataset.tab;sfx('pop');renderBoard()});
+});
+Array.prototype.forEach.call($('boardLevels').children,function(b){
+  b.addEventListener('click',function(){B.level=+b.dataset.bl;sfx('pop');renderBoard()});
+});
+$('whoBtn').addEventListener('click',function(){sfx('pop');openProfiles()});
+$('profBack').addEventListener('click',function(){show('home')});
+$('addProf').addEventListener('click',addProfile);
+$('nameInp').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();addProfile()}});
+$('boardBtn').addEventListener('click',function(){sfx('pop');openBoard(null,S.level)});
+$('resBoardBtn').addEventListener('click',function(){sfx('pop');openBoard(S.subject,S.pl)});
+$('boardBack').addEventListener('click',function(){show('home')});
+armBtn($('resetAll'),function(){
+  DB.profiles.forEach(function(p){p.stars=0;p.rounds=[]});
+  saveDB();paintStars();renderProfiles();
+  $('profNote').textContent='Semua skor sudah dikosongkan.';
+});
+
 $('speakBtn').addEventListener('click',function(){
   var q=S.qs[S.i];if(!q)return;
   var wasMuted=muted;muted=false;speak(q.say);muted=wasMuted;
@@ -1401,6 +1680,8 @@ $('backBtn').addEventListener('click',function(){
 $('againBtn').addEventListener('click',function(){start(S.subject)});
 $('menuBtn').addEventListener('click',function(){show('home')});
 paintLevel();
+paintWho();paintStars();
+if(!me())openProfiles(DB.profiles.length?'Pilih pemain untuk mula.':'Selamat datang! Buat profil pemain pertama.');
 })();
 </script>
 </body>
