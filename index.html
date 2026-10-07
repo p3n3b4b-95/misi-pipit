@@ -183,6 +183,20 @@ h1,h2,p{margin:0}
 .nbox.pat{font-size:1.5rem;height:56px;max-width:52px;font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif}
 .seq.days .nbox{height:52px;font-size:1rem;border-width:2px;padding:0;max-width:48px}
 .coin{display:inline-grid;place-items:center;width:54px;height:54px;border-radius:50%;background:#DDE1EC;border:3px solid #8A93AD;box-shadow:inset -4px -4px 0 rgba(29,39,96,.12);font:800 1.05rem/1 var(--f-display);color:var(--ink);animation:pop .4s backwards}
+.sm .slot,.sm .tile{min-width:52px;min-height:60px;padding:0 8px;font-size:1.7rem}
+.sm.slots,.sm.tiles{gap:8px}
+.match{display:grid;grid-template-columns:1fr 1fr;gap:10px 18px;width:100%}
+.mcol{display:flex;flex-direction:column;gap:10px;min-width:0}
+.mbtn{min-height:64px;min-width:0;border:4px solid var(--sky-deep);border-radius:16px;background:#fff;color:var(--ink);box-shadow:0 5px 0 var(--sky-deep);font-family:var(--f-read);font-weight:700;font-size:1.5rem;padding:6px;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:3px;overflow-wrap:anywhere;transition:transform .08s,box-shadow .08s}
+.mbtn.sel{border-color:var(--berry);background:#EFEAFF;transform:translateY(3px);box-shadow:0 2px 0 var(--berry)}
+.mbtn.done{background:var(--grass-deep);border-color:var(--grass-dark);color:#fff;box-shadow:0 5px 0 var(--grass-dark);pointer-events:none}
+.mbtn.done .dotrow i{background:#fff}
+.mbtn.bad{animation:shake .45s;border-color:var(--coral);background:#FFE3E0}
+.mbtn .bign{font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",var(--f-read),sans-serif}
+.clap{width:110px;height:110px;border-radius:50%;border:0;background:var(--sun);box-shadow:0 8px 0 var(--sun-deep);font-size:3.4rem;line-height:1;display:grid;place-items:center;font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif;transition:transform .08s,box-shadow .08s}
+.clap:active,.clap.hit{transform:translateY(6px) scale(.96);box-shadow:0 2px 0 var(--sun-deep)}
+.dotrow.clapcount{min-height:22px}
+.dotrow.clapcount i{width:18px;height:18px;background:var(--berry);animation:pop .25s}
 .nbox.mark{background:var(--sun);border-color:var(--sun-deep)}
 .nbox.ans{background:var(--grass-deep);border-color:var(--grass-dark);color:#fff;animation:pop .35s}
 .cluster{display:flex;flex-wrap:wrap;justify-content:center;gap:2px;font-size:1.35rem;line-height:1.1;max-width:100%;font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif}
@@ -821,9 +835,79 @@ function qMoney(L){
       choices(opts,ans,function(v){return '<span>'+v+'</span>'},'words');
     }};
 }
+/* Padanan: ketuk satu di kiri, kemudian pasangannya di kanan */
+function dotsHtml(n){var d='<span class="dotrow">';for(var i=0;i<n;i++)d+='<i></i>';return d+'</span>'}
+function qMatch(cfg){
+  var pairs=cfg.pairs;
+  return {prompt:cfg.prompt,say:cfg.say||cfg.prompt,tip:cfg.tip,hint:cfg.hint,explain:cfg.explain,
+    build:function(){
+      var box=el('div','match'),lc=el('div','mcol'),rc=el('div','mcol');
+      var sel={l:null,r:null},matched=0,all=[];
+      function evaluate(){
+        var a=sel.l,c=sel.r;sel.l=sel.r=null;
+        a.classList.remove('sel');c.classList.remove('sel');
+        if(a.dataset.k===c.dataset.k){
+          a.classList.add('done');c.classList.add('done');matched++;
+          if(matched===pairs.length)judge(true,{});else tone(880,0,.15);
+        }else{
+          a.classList.add('bad');c.classList.add('bad');
+          setTimeout(function(){a.classList.remove('bad');c.classList.remove('bad')},520);
+          judge(false,{});
+        }
+      }
+      function mk(p,side){
+        var b=el('button','mbtn',side==='l'?p.l:p.r);
+        b.type='button';b.dataset.k=p.k;all.push(b);
+        b.addEventListener('click',function(){
+          if(S.locked||b.classList.contains('done'))return;
+          sfx('pop');
+          if(sel[side])sel[side].classList.remove('sel');
+          sel[side]=b;b.classList.add('sel');
+          if(sel.l&&sel.r)evaluate();
+        });
+        return b;
+      }
+      shuffle(pairs).forEach(function(p){lc.appendChild(mk(p,'l'))});
+      shuffle(pairs).forEach(function(p){rc.appendChild(mk(p,'r'))});
+      box.appendChild(lc);box.appendChild(rc);
+      $('stage').appendChild(box);
+      this._fin=function(){all.forEach(function(b){b.classList.add('done');b.classList.remove('sel')})};
+    },
+    finish:function(){if(this._fin)this._fin()}};
+}
+function qMatchNum(L){
+  var n=(L===1)?3:4,max=(L===1)?10:20;
+  var nums=shuffle(Array.apply(null,Array(max)).map(function(_,i){return i+1})).slice(0,n);
+  var pairs=nums.map(function(v){
+    return {k:String(v),l:'<span class="bign">'+v+'</span>',r:(L===1)?dotsHtml(v):'<span>'+NUMW[v]+'</span>'};
+  });
+  var what=(L===1)?'titik-titik':'perkataan';
+  return qMatch({prompt:'Padankan nombor dengan '+what+'. Ketuk satu nombor, kemudian ketuk pasangannya.',
+    say:'Padankan nombor dengan '+what+'.',tip:'Ketuk satu di kiri, kemudian satu di kanan.',
+    hint:(L===1)?'Kira titik-titik dahulu, kemudian cari nombor yang sama.':'Baca perkataan itu perlahan-lahan, kemudian cari nombornya.',
+    explain:nums.slice().sort(function(a,b){return a-b}).map(function(v){return v+' ialah '+NUMW[v]}).join(', ')+'.',
+    pairs:pairs});
+}
+function qMultiply(L){
+  var t=pick(THINGS),e=t[0],name=t[1],a,b;
+  if(L===1){a=ri(2,4);b=ri(2,3)}else{a=ri(2,5);b=ri(2,5)}
+  var ans=a*b,rep=[];for(var i=0;i<a;i++)rep.push(b);
+  var p=a+' kumpulan. Setiap kumpulan ada '+b+' '+name+'. Berapa semuanya?';
+  return {prompt:p,say:p,tip:'Kira satu kumpulan, kemudian tambah kumpulan lain.',
+    hint:'Tambah berulang: '+rep.join(' + ')+'.',
+    explain:rep.join(' + ')+' sama dengan '+ans+'. Jadi '+a+' darab '+b+' sama dengan '+ans+'.',
+    build:function(){
+      sizeFor(ans);
+      var eq=el('div','eq');
+      for(var k=0;k<a;k++){var g=items(e,b,k*b);g.classList.add(k%2?'g2':'g1');eq.appendChild(g)}
+      $('stage').appendChild(eq);
+      $('stage').appendChild(el('div','numeq',a+' × '+b+' = ?'));
+      choices(numChoices(ans,0,(L===1)?14:30,[a+b]),ans);
+    }};
+}
 function mathSet(L){
   var req=[qCount,qAdd,qSub];
-  var opt=[qSeq,qBig,qCompare,qPattern,qClock,qShape,qStory,qNumWord,qBalloon,qEvenOdd,qBefore,qMoney];
+  var opt=[qSeq,qBig,qCompare,qPattern,qClock,qShape,qStory,qNumWord,qBalloon,qEvenOdd,qBefore,qMoney,qMultiply,qMatchNum];
   var fs=req.concat(shuffle(opt).slice(0,7));
   return shuffle(fs).map(function(f){return f(L)});
 }
@@ -952,7 +1036,7 @@ function qOrder(cfg){
   return {prompt:cfg.prompt,say:cfg.prompt,tip:cfg.tip,hint:cfg.hint,explain:cfg.explain,
     build:function(){
       var st=$('stage');st.appendChild(el('div','pic',cfg.emoji));
-      var slotsEl=el('div','slots');
+      var slotsEl=el('div','slots'+(cfg.small?' sm':''));
       var slots=parts.map(function(){
         var d=el('button','slot','');d.type='button';d.setAttribute('aria-label','Petak kosong');
         slotsEl.appendChild(d);return {el:d,tile:null};
@@ -960,7 +1044,7 @@ function qOrder(cfg){
       st.appendChild(slotsEl);
       var order,guard=0;
       do{order=shuffle(parts)}while(order.join(cfg.join)===whole&&guard++<8);
-      var box=$('answers');box.className='answers tiles';box.innerHTML='';
+      var box=$('answers');box.className='answers tiles'+(cfg.small?' sm':'');box.innerHTML='';
       var tiles=order.map(function(t){
         var b=el('button','tile',t);b.type='button';box.appendChild(b);
         return {el:b,t:t,slot:null};
@@ -1152,6 +1236,54 @@ function qWordType(L){
       choices(['kata nama','kata kerja'],ans,function(v){return '<span>'+v+'</span>'},'two');
     }};
 }
+function qSpellTiles(w){
+  return qOrder({parts:w.w.split(''),join:'',small:true,emoji:w.e,prompt:'Susun huruf untuk mengeja perkataan ini.',
+    tip:'Sebut perkataan itu, kemudian ketuk huruf mengikut urutan.',
+    hint:'Sebut perlahan-lahan: '+w.s.join(' ... ')+'. Huruf pertama ialah '+w.w[0].toUpperCase()+'.',
+    explain:'Ejaannya ialah '+w.w.split('').join(' ')+', iaitu '+w.w+'.'});
+}
+function qMatchWord(L){
+  var ws=shuffle(WORDS).slice(0,(L===1)?3:4);
+  var pairs=ws.map(function(w){return {k:w.w,l:'<span class="bign">'+w.e+'</span>',r:'<span>'+w.w+'</span>'}});
+  return qMatch({prompt:'Padankan gambar dengan perkataan. Ketuk satu gambar, kemudian ketuk perkataannya.',
+    say:'Padankan gambar dengan perkataan.',tip:'Ketuk satu di kiri, kemudian satu di kanan.',
+    hint:'Sebut nama gambar itu. Dengar bunyi pertamanya, kemudian cari perkataan yang bermula dengan huruf itu.',
+    explain:ws.map(function(w){return w.w}).join(', ')+'.',pairs:pairs});
+}
+function qClap(w){
+  var n=w.s.length;
+  var p='Tepuk tangan! Tepuk mengikut bilangan suku kata, kemudian tekan Semak.';
+  return {prompt:p,say:'Tepuk mengikut bilangan suku kata dalam perkataan '+w.w+'.',tip:'Sebut perkataan itu, tepuk setiap bunyi.',
+    hint:'Sebut dan tepuk: '+w.s.join(' - ')+'. Tekan Padam jika mahu mula semula.',
+    explain:w.w+' ada '+n+' suku kata: '+w.s.join(' ... ')+'.',
+    build:function(){
+      var claps=0,self=this;
+      $('stage').appendChild(bigPic(w));
+      this.wordEl=el('div','bigword',w.w);$('stage').appendChild(this.wordEl);
+      var pad=el('button','clap','👏');pad.type='button';pad.setAttribute('aria-label','Tepuk');
+      var cnt=el('div','dotrow clapcount');
+      pad.addEventListener('click',function(){
+        if(S.locked||claps>=8)return;
+        claps++;cnt.appendChild(el('i',''));sfx('pop');
+        pad.classList.remove('hit');void pad.offsetWidth;pad.classList.add('hit');
+      });
+      $('stage').appendChild(pad);$('stage').appendChild(cnt);
+      var box=$('answers');box.className='answers two';box.innerHTML='';
+      var clr=el('button','btn light','Padam'),chk=el('button','btn green','Semak');
+      clr.type=chk.type='button';
+      function reset(){claps=0;cnt.innerHTML=''}
+      clr.addEventListener('click',function(){if(S.locked)return;reset();sfx('pop')});
+      chk.addEventListener('click',function(){
+        if(S.locked)return;
+        if(!claps){say('Tepuk dahulu, kemudian tekan Semak.');return}
+        var ok=(claps===n);
+        if(!ok)reset();
+        judge(ok,{});
+      });
+      box.appendChild(clr);box.appendChild(chk);
+    },
+    finish:function(){if(this.wordEl)this.wordEl.textContent=w.s.join(' - ')}};
+}
 function bmSet(L){
   var used={};
   function take(f){
@@ -1175,7 +1307,10 @@ function bmSet(L){
     function(){return qCase(L)},
     function(){return qHari(L)},
     function(){return qSpell(take())},
-    function(){return qWordType(L)}
+    function(){return qWordType(L)},
+    function(){return qSpellTiles(take(function(w){return w.w.length<=(L===1?5:8)}))},
+    function(){return qMatchWord(L)},
+    function(){return qClap(take())}
   ];
   shuffle(others).slice(0,8).forEach(function(f){qs.push(f())});
   return shuffle(qs);
